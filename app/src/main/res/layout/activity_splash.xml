@@ -27,7 +27,7 @@
         android:letterSpacing="0.1"
         android:text="@string/splash_bottom_text"
         android:textColor="#FF004D"
-        android:textSize="11sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
