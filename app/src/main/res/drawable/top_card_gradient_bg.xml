@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-        android:startColor="#8C4EE9"
-        android:centerColor="#7B42ED"
-        android:endColor="#6A3BDB"
-        android:angle="270" />
-    <corners
-        android:bottomLeftRadius="45dp"
-        android:bottomRightRadius="45dp" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Gradient background -->
+    <item>
+        <shape>
+            <gradient
+                android:startColor="#8C4EE9"
+                android:centerColor="#7B42ED"
+                android:endColor="#6A3BDB"
+                android:angle="270" />
+
+            <corners
+                android:bottomLeftRadius="45dp"
+                android:bottomRightRadius="45dp" />
+        </shape>
+    </item>
+
+    <!-- Doodle transparent image overlay -->
+    <item>
+        <bitmap
+            android:src="@drawable/doodle_bg"
+            android:gravity="fill"
+            android:tileMode="disabled" />
+    </item>
+
+</layer-list>

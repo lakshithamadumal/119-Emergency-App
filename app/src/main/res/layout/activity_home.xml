@@ -11,6 +11,7 @@
         android:background="@drawable/top_card_gradient_bg"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Main Heading -->
         <TextView
             android:id="@+id/mainHeadingText"
             android:layout_width="wrap_content"
@@ -20,12 +21,87 @@
             android:textSize="32sp"
             android:textStyle="bold"
             android:gravity="center"
+            android:lineSpacingExtra="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.55" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout><androidx.constraintlayout.widget.ConstraintLayout
+
+        <ImageView
+            android:id="@+id/icon_fire"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_fire_emergency"
+            android:background="@drawable/circle_background_orange"
+            android:scaleType="centerCrop"
+            android:padding="12dp"
+            android:contentDescription="Fire emergency"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="40dp" />
+
+        <ImageView
+            android:id="@+id/icon_medical"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:src="@drawable/ic_first_aid_kit"
+            android:background="@drawable/circle_background_red"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:contentDescription="Medical help"
+            app:layout_constraintTop_toTopOf="@id/icon_fire"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="50dp" />
+
+        <ImageView
+            android:id="@+id/icon_ambulance"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="228dp"
+            android:layout_marginBottom="36dp"
+            android:background="@drawable/circle_background_blue"
+            android:contentDescription="Ambulance 119"
+            android:padding="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_ambulance"
+            app:layout_constraintBottom_toTopOf="@id/mainHeadingText"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/icon_police"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="68dp"
+            android:background="@drawable/circle_background_yellow"
+            android:contentDescription="medicine alert"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_medicine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mainHeadingText" />
+
+        <ImageView
+            android:id="@+id/icon_safety"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:src="@drawable/ic_safety_shield"
+            android:background="@drawable/circle_background_green"
+            android:scaleType="centerCrop"
+            android:padding="12dp"
+            android:contentDescription="Stay safe"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="50dp"
+            android:layout_marginStart="80dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/statsBar"
         android:layout_width="336dp"
         android:layout_height="65dp"
