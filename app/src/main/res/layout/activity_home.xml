@@ -4,35 +4,44 @@
     android:layout_height="match_parent"
     android:background="#FBF6F8">
 
-    <View
-        android:id="@+id/topCard"
-        android:layout_width="0dp"
-        android:layout_height="266dp"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/top_card_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topCardArea"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/top_card_gradient_bg"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/mainHeadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stay Safe\n119 Fast!"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout><androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/statsBar"
         android:layout_width="336dp"
-        android:layout_height="63dp"
+        android:layout_height="65dp"
         android:background="@drawable/stats_bar_bg"
         android:elevation="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/topCard"
+        app:layout_constraintBottom_toBottomOf="@+id/topCardArea"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topCard">
+        app:layout_constraintTop_toBottomOf="@+id/topCardArea">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="50dp"
             android:text="ACTIVE REPORTS"
             android:textColor="#201C21"
-            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,14 +49,13 @@
 
         <TextView
             android:layout_width="110dp"
-            android:layout_height="45dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/button_bg"
             android:backgroundTint="#03CFB7"
             android:gravity="center"
             android:text="15,346+"
             android:textColor="#FFFFFF"
-            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
