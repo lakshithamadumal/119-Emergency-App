@@ -13,19 +13,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.iamlaky.emergency119.R;
 
-public class SignUpActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_login);
 
-        TextView tvLoginLink = findViewById(R.id.tvLoginLink);
+        TextView tvSignUpLink = findViewById(R.id.tvSignUpLink);
 
-        tvLoginLink.setOnClickListener(new View.OnClickListener() {
+        tvSignUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();

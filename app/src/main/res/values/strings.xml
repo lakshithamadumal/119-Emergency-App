@@ -11,4 +11,11 @@
     <string name="sign_up_btn_text">SIGN UP</string>
     <string name="sign_up_bottom_text">Already have an account?</string>
     <string name="sign_up_bottom_link">Login</string>
+    <string name="login_header_text">Login</string>
+    <string name="login_email_text">Email</string>
+    <string name="login_email_hint">Your email or phone</string>
+    <string name="log_in_forgot_text">Forgot password?</string>
+    <string name="log_in_bottom_text">Don\'t have an account?</string>
+    <string name="log_in_bottom_link">Sign Up</string>
+    <string name="login_btn_text">LOGIN</string>
 </resources>
