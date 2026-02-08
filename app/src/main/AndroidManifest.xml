@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119">
         <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
