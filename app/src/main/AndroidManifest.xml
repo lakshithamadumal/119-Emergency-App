@@ -12,8 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119">
         <activity
+            android:name=".activity.SplashActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ResetPasswordActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false" />
@@ -21,7 +24,7 @@
             android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
