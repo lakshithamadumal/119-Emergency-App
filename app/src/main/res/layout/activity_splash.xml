@@ -26,7 +26,7 @@
         android:layout_marginBottom="40dp"
         android:letterSpacing="0.1"
         android:text="@string/splash_bottom_text"
-        android:textColor="#FF004D"
+        android:textColor="@color/mainRed"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
