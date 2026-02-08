@@ -75,6 +75,7 @@
         android:paddingHorizontal="20dp"
         android:inputType="textEmailAddress"
         android:textColorHint="#BDBDBD"
+        android:textColor="@color/mainBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/lblEmail"
         app:layout_constraintTop_toBottomOf="@+id/lblEmail" />
@@ -99,6 +100,7 @@
         android:hint="@string/password_text"
         android:inputType="textPassword"
         android:paddingHorizontal="20dp"
+        android:textColor="@color/mainBlack"
         app:layout_constraintEnd_toEndOf="@+id/etLoginEmail"
         app:layout_constraintStart_toStartOf="@+id/lblPassword"
         app:layout_constraintTop_toBottomOf="@+id/lblPassword" />
