@@ -3,6 +3,7 @@
 
     <color name="mainRed">#FA043E</color>
     <color name="mainBlack">#1D1C21</color>
+    <color name="mainWhite">#FFFFFF</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FFF</color>
