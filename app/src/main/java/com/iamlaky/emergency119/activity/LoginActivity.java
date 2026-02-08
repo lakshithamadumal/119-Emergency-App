@@ -21,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         TextView tvSignUpLink = findViewById(R.id.tvSignUpLink);
+        TextView tvForgotPass = findViewById(R.id.tvForgotPass);
 
         tvSignUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,6 +30,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
+            }
+        });
+
+        tvForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                startActivity(intent);
+
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
     }
