@@ -143,6 +143,7 @@
         android:layout_height="400dp"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:background="@drawable/doodle_main_bg"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavSection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
