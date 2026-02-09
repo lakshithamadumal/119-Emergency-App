@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
         TextView tvSignUpLink = findViewById(R.id.tvSignUpLink);
         TextView tvForgotPass = findViewById(R.id.tvForgotPass);
+        AppCompatButton btnLogin = findViewById(R.id.btnLogin);
 
         tvSignUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +42,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
             }
         });
     }
