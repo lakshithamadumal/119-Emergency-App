@@ -2,10 +2,12 @@ package com.iamlaky.emergency119.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.iamlaky.emergency119.R;
 
@@ -18,6 +20,7 @@ public class HomeActivity extends AppCompatActivity {
 
         View pulseView = findViewById(R.id.pulseView);
         View pulseCallView = findViewById(R.id.pulseCallView);
+        ConstraintLayout sosButton = findViewById(R.id.sosButton);
 
 // Button Animation
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(pulseView, "scaleX", 1.0f, 2.0f);
@@ -48,6 +51,16 @@ public class HomeActivity extends AppCompatActivity {
         callPulseSet.setDuration(2000);
         callPulseSet.start();
         // Call Button Animation
+
+        sosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, MapActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+            }
+        });
 
     }
 }
