@@ -73,8 +73,8 @@
 
         <ImageView
             android:id="@+id/icon_medical"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="84dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/circle_background_red"
@@ -87,8 +87,8 @@
 
         <ImageView
             android:id="@+id/icon_ambulance"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_marginStart="228dp"
             android:layout_marginBottom="32dp"
             android:background="@drawable/circle_background_blue"
@@ -101,8 +101,8 @@
 
         <ImageView
             android:id="@+id/icon_police"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="68dp"
             android:background="@drawable/circle_background_yellow"
@@ -115,8 +115,8 @@
 
         <ImageView
             android:id="@+id/icon_safety"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/ic_safety_shield"
             android:background="@drawable/circle_background_green"
             android:scaleType="centerCrop"
