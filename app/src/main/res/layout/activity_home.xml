@@ -11,6 +11,34 @@
         android:background="@drawable/top_card_gradient_bg"
         app:layout_constraintTop_toTopOf="parent">
 
+        <FrameLayout
+            android:id="@+id/notificationContainer"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/circle_shape_light"
+            android:backgroundTint="@null"
+            android:stateListAnimator="@null"
+            android:foreground="@null"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:src="@drawable/notification_icon" /> <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/red_dot" />
+        </FrameLayout>
+
         <!-- Main Heading -->
         <TextView
             android:id="@+id/mainHeadingText"
@@ -47,8 +75,8 @@
             android:id="@+id/icon_medical"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="36dp"
+            android:layout_marginTop="84dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/circle_background_red"
             android:contentDescription="@string/icon_medical_text"
             android:padding="12dp"
