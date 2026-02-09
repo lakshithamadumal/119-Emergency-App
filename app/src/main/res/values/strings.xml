@@ -23,4 +23,13 @@
     <string name="reset_password_text">Please enter your email address to request a password reset</string>
     <string name="reset_password_hint">example@gmail.com</string>
     <string name="send_new_password_btn_text">SEND NEW PASSWORD</string>
+    <string name="home_main_header">Stay Safe\n119 Fast!</string>
+    <string name="icon_fire_text">Fire emergency</string>
+    <string name="icon_medical_text">Medical help</string>
+    <string name="icon_ambulance_text">Ambulance 119</string>
+    <string name="icon_medicine_text">medicine alert</string>
+    <string name="icon_safety_text">Stay safe</string>
+    <string name="status_bar_text">ACTIVE REPORTS</string>
+    <string name="all_reports_count">15,346+</string>
+    <string name="sos_btn_text">SOS</string>
 </resources>
