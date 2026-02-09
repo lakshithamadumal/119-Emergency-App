@@ -18,7 +18,7 @@ public class HomeActivity extends AppCompatActivity {
 
         View pulseView = findViewById(R.id.pulseView);
 
-// රවුම ලොකු වෙලා මැකී යන Animation එක
+// Button Animation
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(pulseView, "scaleX", 1.0f, 2.0f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(pulseView, "scaleY", 1.0f, 2.0f);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(pulseView, "alpha", 0.5f, 0f);
@@ -29,8 +29,9 @@ public class HomeActivity extends AppCompatActivity {
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(scaleX, scaleY, alpha);
-        animatorSet.setDuration(1500); // වේගය මෙතනින් වෙනස් කරන්න පුළුවන්
+        animatorSet.setDuration(1500);
         animatorSet.start();
+// Button Animation
 
     }
 }
