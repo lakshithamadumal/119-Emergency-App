@@ -32,4 +32,10 @@
     <string name="status_bar_text">ACTIVE REPORTS</string>
     <string name="all_reports_count">15,346+</string>
     <string name="sos_btn_text">SOS</string>
+
+    <string name="mapbox_access_token">
+pk.eyJ1IjoibGFreTIwMDMiLCJhIjoiY21sbmdpdXE4MHNsdDNlcHVkb2FtYWQ0ZiJ9.Nj48QIGZ9wSy8Zuw7NEUjQ
+</string>
+
+
 </resources>
