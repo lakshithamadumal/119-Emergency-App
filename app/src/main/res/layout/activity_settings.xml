@@ -234,7 +234,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/navBar">
             <View android:id="@+id/pulseCallView" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/call_icon_border" />
-            <FrameLayout android:id="@+id/btnCall" android:layout_width="56dp" android:layout_height="56dp" android:background="@drawable/circle_ripple" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" >
+            <FrameLayout android:id="@+id/btnCall" android:layout_width="56dp" android:layout_height="56dp" android:background="@drawable/circle_ripple" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"                 android:clickable="true"
+                android:focusable="true">
                 <ImageView android:layout_width="25dp" android:layout_height="25dp" android:layout_gravity="center" android:src="@drawable/call" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
