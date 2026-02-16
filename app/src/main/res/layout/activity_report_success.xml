@@ -8,24 +8,22 @@
     android:background="#FBF6F8"
     tools:context=".activity.ReportSuccessActivity">
 
-    <androidx.cardview.widget.CardView
+    <ImageButton
         android:id="@+id/btnClose"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="25dp"
-        app:cardCornerRadius="22dp"
-        app:cardElevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@drawable/back_button_bg"
+        android:src="@drawable/ic_close"
+        android:scaleType="centerInside"
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_close"
-            app:tint="#000000" />
-    </androidx.cardview.widget.CardView>
+        android:backgroundTint="@null"
+        android:stateListAnimator="@null"
+        android:elevation="4dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/ivSuccessIllustration"
