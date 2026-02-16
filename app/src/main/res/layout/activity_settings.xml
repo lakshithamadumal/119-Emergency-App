@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FBF6F8"
+    tools:context=".activity.SettingsActivity">
+
+    <TextView
+        android:id="@+id/tvSettingsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Settings"
+        android:textColor="#111719"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+        app:layout_constraintTop_toBottomOf="@id/tvSettingsTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="20dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_white_rounded_card"
+                android:paddingHorizontal="16dp">
+                <ImageView
+                    android:id="@+id/ivNotifIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_notification"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Notification" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivNotifIcon" app:layout_constraintTop_toTopOf="parent" />
+                <com.google.android.material.switchmaterial.SwitchMaterial android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_white_rounded_card"
+                android:paddingHorizontal="16dp">
+                <ImageView
+                    android:id="@+id/ivGpsIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_gps"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Allow GPS" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivGpsIcon" app:layout_constraintTop_toTopOf="parent" />
+                <com.google.android.material.switchmaterial.SwitchMaterial android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_white_rounded_card"
+                android:paddingHorizontal="16dp">
+                <ImageView android:id="@+id/ivPassIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_lock" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Reset Password" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivPassIcon" app:layout_constraintTop_toTopOf="parent" />
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_arrow_right" android:alpha="0.3" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_white_rounded_card"
+                android:paddingHorizontal="16dp">
+                <ImageView android:id="@+id/ivPrivacyIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_privacy" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Privacy Policy" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivPrivacyIcon" app:layout_constraintTop_toTopOf="parent" />
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_arrow_right" android:alpha="0.3" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_white_rounded_card"
+                android:paddingHorizontal="16dp">
+                <ImageView android:id="@+id/ivTermsIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_terms" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Terms &amp; Conditions" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivTermsIcon" app:layout_constraintTop_toTopOf="parent" />
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_arrow_right" android:alpha="0.3" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_white_rounded_card"
+                android:paddingHorizontal="16dp">
+                <ImageView android:id="@+id/ivFeedIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_feedback" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Feedback" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivFeedIcon" app:layout_constraintTop_toTopOf="parent" />
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_arrow_right" android:alpha="0.3" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="119 V1.0.0" android:textColor="#9796A1" android:textSize="13sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Develop by Lakshitha Madumal" android:textColor="#9796A1" android:textSize="13sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/logout_btn_bg"
+        android:drawableStart="@drawable/ic_logout"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:drawablePadding="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="25dp"
+        android:text="Log Out"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavSection"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomNavSection"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View
+            android:id="@+id/navBar"
+            android:layout_width="282dp"
+            android:layout_height="68dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bottom_nav_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/flHome"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/nav_icon_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/home" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flDoc"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="80dp"
+            android:background="@drawable/nav_icon_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/report" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flProfile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="145dp"
+            android:background="@drawable/nav_icon_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/profile" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flSettings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="210dp"
+            android:background="@drawable/home_icon_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/settings" />
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <View android:id="@+id/pulseCallView" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/call_icon_border" />
+            <FrameLayout android:id="@+id/btnCall" android:layout_width="56dp" android:layout_height="56dp" android:background="@drawable/circle_ripple" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" >
+                <ImageView android:layout_width="25dp" android:layout_height="25dp" android:layout_gravity="center" android:src="@drawable/call" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
