@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119.FullScreen">
         <activity
+            android:name=".activity.NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
@@ -66,7 +69,7 @@
             android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.NotificationActivity"
+            android:name=".activity.ReportSuccessActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
