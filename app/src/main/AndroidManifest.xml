@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119.FullScreen">
         <activity
+            android:name=".activity.NotificationPermissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SubscribtionActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.PaymentSuccessActivity"
             android:exported="false" />
         <activity
@@ -42,7 +48,7 @@
             android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SubscribtionActivity"
+            android:name=".activity.NoInternetActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
