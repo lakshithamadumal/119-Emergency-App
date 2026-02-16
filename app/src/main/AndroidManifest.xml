@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119.FullScreen">
         <activity
+            android:name=".activity.MedicalInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ViewReportActivity"
             android:exported="false" />
         <activity

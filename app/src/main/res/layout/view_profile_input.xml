@@ -11,18 +11,20 @@
         android:layout_height="wrap_content"
         android:text="Label"
         android:textColor="#9796A1"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        android:layout_marginStart="4dp"/>
 
     <EditText
         android:id="@+id/etInputValue"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/bg_white_rounded_card"
+        android:background="@drawable/edit_text_bg"
         android:paddingHorizontal="16dp"
         android:textColor="#111719"
         android:textSize="16sp"
-        android:backgroundTint="#FFFFFF"
-        android:importantForAutofill="no"
-        android:inputType="text"/>
+        android:hint="Value"
+        android:textColorHint="#D1D1D1"
+        android:inputType="text"
+        android:importantForAutofill="no" />
 </LinearLayout>
