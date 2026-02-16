@@ -19,13 +19,10 @@ public class ViewReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_report);
 
-        // UI Views ටික අඳුන්වා දීම
         initViews();
 
-        // බැක් බටන් එක වැඩ කරන්න
         btnBack.setOnClickListener(v -> finish());
 
-        // දැනට Sample විදිහට Timeline එකේ දත්ත ටික පිරවීම
         setupTimelineData();
     }
 
@@ -40,23 +37,18 @@ public class ViewReportActivity extends AppCompatActivity {
     }
 
     private void setupTimelineData() {
-        // 1. Received Step
         View step1 = findViewById(R.id.stepReceived);
         updateStep(step1, "Received", "11:45 AM", "Emergency request received by the system.", true);
 
-        // 2. Assigned Step
         View step2 = findViewById(R.id.stepAssigned);
         updateStep(step2, "Assigned", "11:50 AM", "An officer has been assigned to your location.", true);
 
-        // 3. In Progress Step
         View step3 = findViewById(R.id.stepInProgress);
         updateStep(step3, "In Progress", "12:05 PM", "Help is on the way to your location.", true);
 
-        // 4. Completed Step
         View step4 = findViewById(R.id.stepCompleted);
         updateStep(step4, "Completed", "12:30 PM", "The emergency has been successfully resolved.", false);
 
-        // Completed එකේදී තිත කොළ පාට කරන්න ඕන නම් මෙතනින් පුළුවන්
         step4.findViewById(R.id.dot).setBackgroundResource(R.drawable.timeline_dot_green);
 
         step1.findViewById(R.id.dot).setBackgroundResource(R.drawable.timeline_dot_blue);
@@ -68,7 +60,6 @@ public class ViewReportActivity extends AppCompatActivity {
         ((TextView) stepView.findViewById(R.id.tvStepTime)).setText(time);
         ((TextView) stepView.findViewById(R.id.tvStepDesc)).setText(desc);
 
-        // අවසන් පියවරේදී යටට යන ඉර අයින් කරන්න
         View line = stepView.findViewById(R.id.viewLine);
         line.setVisibility(showLine ? View.VISIBLE : View.GONE);
     }
