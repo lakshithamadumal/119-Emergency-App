@@ -36,6 +36,19 @@
     <string name="mapbox_access_token">
 pk.eyJ1IjoibGFreTIwMDMiLCJhIjoiY21sbmdpdXE4MHNsdDNlcHVkb2FtYWQ0ZiJ9.Nj48QIGZ9wSy8Zuw7NEUjQ
 </string>
+    <string name="header_subscription_text">Subscription</string>
+    <string name="subsctiption_package_name">Annual Safety Membership</string>
+    <string name="subsctiption_tag_line">Complete Emergency Protection for 1 Year</string>
+    <string name="subscription_price">$20</string>
+    <string name="subscription_year">/ per year</string>
+    <string name="subscription_get_started_btn">Get Started</string>
+    <string name="subscription_features_text">Features</string>
+    <string name="subscription_features_01">Unlimited SOS Alerts</string>
+    <string name="subscription_features_02">Live GPS Location Sharing</string>
+    <string name="subscription_features_03">Multimedia Evidence Upload</string>
+    <string name="subscription_features_04">Real-time Status Updates</string>
+    <string name="subscription_features_05">24/7 Priority Support</string>
+    <string name="subscription_features_06">Secure Medical Profile</string>
 
 
 </resources>
