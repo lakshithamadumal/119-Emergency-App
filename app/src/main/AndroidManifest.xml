@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119.FullScreen">
         <activity
+            android:name=".activity.ViewReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ReportsActivity"
             android:exported="false" />
         <activity
@@ -54,7 +57,7 @@
             android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ViewReportActivity"
+            android:name=".activity.ProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
