@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@drawable/bg_white_rounded_card"
+    android:layout_marginBottom="8dp">
+
+    <View
+        android:id="@+id/iconBg"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/circle_blue_bg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivBell"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_notification_blue"
+        app:layout_constraintBottom_toBottomOf="@id/iconBg"
+        app:layout_constraintEnd_toEndOf="@id/iconBg"
+        app:layout_constraintStart_toStartOf="@id/iconBg"
+        app:layout_constraintTop_toTopOf="@id/iconBg" />
+
+    <TextView
+        android:id="@+id/tvNotificationTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Notification Title"
+        android:textColor="#222741"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iconBg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNotificationTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="11.00 AM"
+        android:textColor="#ACAEBE"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/tvNotificationTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvNotificationTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
