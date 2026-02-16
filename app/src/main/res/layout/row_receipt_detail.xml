@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="8dp">
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#4B4E52"
+        android:textSize="13sp"
+        android:fontFamily="sans-serif"
+        android:text="Label" />
+
+    <TextView
+        android:id="@+id/value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:textColor="#121212"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:text="Value" />
+
+</RelativeLayout>

@@ -36,10 +36,6 @@ public class SubscribtionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SubscribtionActivity.this, PaymentSuccessActivity.class);
 
-                intent.putExtra("amount", "$25.00");
-                intent.putExtra("ref_num", "#SLI-88954210");
-                intent.putExtra("merchant", "SafeLife Insurance");
-
                 startActivity(intent);
                 finish();
             }
