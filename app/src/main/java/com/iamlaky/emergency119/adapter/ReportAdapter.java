@@ -38,16 +38,15 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         switch (report.getStatus()) {
             case "Received":
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
-                holder.tvStatus.setTextColor(Color.WHITE);
-                break;
+                holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));                break;
             case "Assigned":
             case "In Progress":
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_yellow);
-                holder.tvStatus.setTextColor(Color.BLACK);
+                holder.tvStatus.setTextColor(Color.parseColor("#ffb400"));
                 break;
             case "Completed":
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_green);
-                holder.tvStatus.setTextColor(Color.WHITE);
+                holder.tvStatus.setTextColor(Color.parseColor("#56ca00"));
                 break;
             default:
                 holder.tvStatus.setBackgroundColor(Color.LTGRAY);
