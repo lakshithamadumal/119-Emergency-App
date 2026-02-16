@@ -77,6 +77,9 @@
                 android:layout_height="64dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_white_rounded_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:paddingHorizontal="16dp">
                 <ImageView android:id="@+id/ivPassIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_lock" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Reset Password" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivPassIcon" app:layout_constraintTop_toTopOf="parent" />
@@ -88,6 +91,9 @@
                 android:layout_height="64dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_white_rounded_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:paddingHorizontal="16dp">
                 <ImageView android:id="@+id/ivPrivacyIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_privacy" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Privacy Policy" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivPrivacyIcon" app:layout_constraintTop_toTopOf="parent" />
@@ -99,6 +105,9 @@
                 android:layout_height="64dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_white_rounded_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:paddingHorizontal="16dp">
                 <ImageView android:id="@+id/ivTermsIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_terms" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Terms &amp; Conditions" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivTermsIcon" app:layout_constraintTop_toTopOf="parent" />
@@ -110,6 +119,9 @@
                 android:layout_height="64dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_white_rounded_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:paddingHorizontal="16dp">
                 <ImageView android:id="@+id/ivFeedIcon" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_feedback" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="Feedback" android:textColor="#000000" android:textSize="16sp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/ivFeedIcon" app:layout_constraintTop_toTopOf="parent" />
