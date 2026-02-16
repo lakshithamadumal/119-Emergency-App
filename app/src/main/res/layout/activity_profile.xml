@@ -21,12 +21,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:clipToPadding="false"
-        android:paddingBottom="24dp"
+        android:paddingBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvProfileTitle">
 
@@ -103,6 +103,7 @@
             <include layout="@layout/view_profile_input" android:id="@+id/inputPhone" />
             <include layout="@layout/view_profile_input" android:id="@+id/inputAddress" />
             <include layout="@layout/view_profile_input" android:id="@+id/inputNIC" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -118,8 +119,8 @@
                 android:background="@drawable/bg_white_rounded_card"
                 android:orientation="vertical"
                 android:padding="12dp">
-
                 <EditText
+                    android:id="@+id/etNick1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -127,10 +128,9 @@
                     android:textSize="14sp"
                     android:textColorHint="#9796A1"
                     android:fontFamily="sans-serif-medium"/>
-
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginVertical="8dp"/>
-
                 <TextView
+                    android:id="@+id/tvEmergencyNum1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_flag_sl"
@@ -147,8 +147,8 @@
                 android:background="@drawable/bg_white_rounded_card"
                 android:orientation="vertical"
                 android:padding="12dp">
-
                 <EditText
+                    android:id="@+id/etNick2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -156,10 +156,9 @@
                     android:textSize="14sp"
                     android:textColorHint="#9796A1"
                     android:fontFamily="sans-serif-medium"/>
-
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginVertical="8dp"/>
-
                 <TextView
+                    android:id="@+id/tvEmergencyNum2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_flag_sl"
@@ -173,9 +172,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
-
                 <Button
                     android:id="@+id/btnUpdate"
                     android:layout_width="0dp"
@@ -186,7 +184,6 @@
                     android:text="UPDATE"
                     android:textColor="#FFFFFF"
                     app:cornerRadius="28dp" />
-
                 <Button
                     android:id="@+id/btnMedicalInfo"
                     android:layout_width="0dp"
@@ -194,11 +191,128 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="#E5E8F0"
-                    android:text="MEDICAL INFO >"
+                    android:text="MEDICAL INFO"
                     android:textColor="#1D1C21"
                     app:cornerRadius="28dp" />
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomNavSection"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View
+            android:id="@+id/navBar"
+            android:layout_width="282dp"
+            android:layout_height="68dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bottom_nav_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/flHome"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/nav_icon_bg"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/home" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flDoc"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="80dp"
+            android:background="@drawable/nav_icon_bg"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/report" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flProfile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="145dp"
+            android:background="@drawable/home_icon_bg"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/profile" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flSettings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="210dp"
+            android:background="@drawable/nav_icon_bg"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintStart_toStartOf="@+id/navBar"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/settings" />
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_marginEnd="16dp"
+            android:clipChildren="false"
+            app:layout_constraintBottom_toBottomOf="@+id/navBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/navBar">
+
+            <View
+                android:id="@+id/pulseCallView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/call_icon_border" />
+
+            <FrameLayout
+                android:id="@+id/btnCall"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/circle_ripple"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/call" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
