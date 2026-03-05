@@ -39,6 +39,7 @@ public class SubscribtionActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private double subscriptionPrice = 0.0;
     private String currencyType = "LKR";
+    private String myOrderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,8 @@ public class SubscribtionActivity extends AppCompatActivity {
 
                 req.setCurrency(currencyType);
                 req.setAmount(subscriptionPrice);
-                req.setOrderId("SUBS_" + System.currentTimeMillis());
+                myOrderId = "SUBS_" + System.currentTimeMillis();
+                req.setOrderId(myOrderId);
                 req.setItemsDescription("Emergency 119 - Annual Membership");
 
                 req.getCustomer().setFirstName(name != null ? name : "User");
@@ -151,13 +153,25 @@ public class SubscribtionActivity extends AppCompatActivity {
         updateData.put("paymentStatus", "Active");
         updateData.put("expiryDate", newExpiryDate);
 
-        firebaseFirestore.collection("users").document(uid).update(updateData).addOnSuccessListener(unused -> {
-            Toast.makeText(this, "Subscription Activated Successfully!", android.widget.Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(SubscribtionActivity.this, PaymentSuccessActivity.class);
-            startActivity(intent);
-            finish();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Failed to update subscription: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
-        });
+        firebaseFirestore.collection("users").document(uid)
+                .update(updateData)
+                .addOnSuccessListener(unused -> {
+
+                    firebaseFirestore.collection("users").document(uid).get().addOnSuccessListener(ds -> {
+                        String fullName = ds.getString("name");
+
+                        Intent intent = new Intent(SubscribtionActivity.this, PaymentSuccessActivity.class);
+                        intent.putExtra("order_id", myOrderId);
+                        intent.putExtra("amount", subscriptionPrice);
+                        intent.putExtra("currency", currencyType);
+                        intent.putExtra("user_name", fullName);
+                        startActivity(intent);
+                        finish();
+                    });
+
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to update database: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }
