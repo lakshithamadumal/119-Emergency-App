@@ -36,13 +36,31 @@ public class LoginActivity extends AppCompatActivity {
 
 ///  Goto MainActivity(Login Process)
         binding.btnLogin.setOnClickListener(view -> {
-            String email = binding.etLoginEmail.getText().toString().trim();;
-            String password = binding.etLoginPassword.getText().toString().trim();;
+            String email = binding.etLoginEmail.getText().toString().trim();
+            String password = binding.etLoginPassword.getText().toString().trim();
+
+            if (email.isEmpty()) {
+                binding.etLoginEmail.setError("Email is required");
+                return;
+            }
+
+            if (password.isEmpty()) {
+                binding.etLoginPassword.setError("Password is required");
+                return;
+            }
+
+            binding.btnLogin.setEnabled(false);
+            binding.btnLogin.setAlpha(0.5f);
 
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    binding.btnLogin.setEnabled(true);
+                    binding.btnLogin.setAlpha(1.0f);
+
                     if (task.isSuccessful()) {
+                        Toast.makeText(LoginActivity.this, "Login Successful.", Toast.LENGTH_SHORT).show();
                         updateUI(firebaseAuth.getCurrentUser());
                     } else {
                         Toast.makeText(LoginActivity.this, "Invalid email or password.", Toast.LENGTH_SHORT).show();
@@ -67,8 +85,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUI(FirebaseUser user){
-        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+    private void updateUI(FirebaseUser user) {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
