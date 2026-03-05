@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.iamlaky.emergency119" />
+                  <option name="mobileSdkAppId" value="1:266163440310:android:9dc9fc40255ec3ea5e7417" />
+                  <option name="projectId" value="emergency-119-app" />
+                  <option name="projectNumber" value="266163440310" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
