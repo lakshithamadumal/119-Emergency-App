@@ -12,6 +12,23 @@
         app:mapbox_resourcesAccessToken="@string/mapbox_access_token"
         />
 
+    <ImageButton
+        android:id="@+id/btnMapBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/back_button_bg"
+        android:src="@drawable/back_arrow"
+        android:scaleType="centerInside"
+
+        android:backgroundTint="@null"
+        android:stateListAnimator="@null"
+        android:elevation="4dp"
+
+        android:contentDescription="@string/back_btn_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSendReport"

@@ -1,6 +1,11 @@
 package com.iamlaky.emergency119.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.geojson.Point;
@@ -13,6 +18,7 @@ public class MapActivity extends AppCompatActivity {
 
     private MapView mapView;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,5 +37,12 @@ public class MapActivity extends AppCompatActivity {
                     mapView.getMapboxMap().setCamera(cameraOptions);
                 }
         );
+        ImageButton btnMapBack = findViewById(R.id.btnMapBack);
+        btnMapBack.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        });
     }
 }
