@@ -32,6 +32,10 @@ dependencyResolutionManagement {
                 password = "sk.eyJ1IjoibGFreTIwMDMiLCJhIjoiY21sbmpvOGJnMHJsMzNocjJveTNoaGkxciJ9.9iw9QO32ewDZpqnLEy-ciA"
             }
         }
+
+        maven {
+            url  "https://jitpack.io"
+        }
     }
 }
 
