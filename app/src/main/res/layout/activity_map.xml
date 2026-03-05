@@ -12,6 +12,17 @@
         app:mapbox_resourcesAccessToken="@string/mapbox_access_token"
         />
 
+    <ImageView
+        android:id="@+id/imgCenterPin"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_location_pin"
+        android:translationY="-22.5dp"
+        app:layout_constraintBottom_toBottomOf="@id/mapView"
+        app:layout_constraintEnd_toEndOf="@id/mapView"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toTopOf="@id/mapView" />
+
     <ImageButton
         android:id="@+id/btnMapBack"
         android:layout_width="50dp"
