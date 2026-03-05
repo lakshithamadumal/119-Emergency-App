@@ -17,6 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119.FullScreen">
         <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/Theme._119.Splash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
@@ -26,19 +35,10 @@
             android:name=".activity.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SettingsFragment"
-            android:exported="false" />
-        <activity
-            android:name=".fragment.ProfileFragment"
-            android:exported="false" />
-        <activity
             android:name=".activity.MedicalInfoActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ViewReportActivity"
-            android:exported="false" />
-        <activity
-            android:name=".fragment.ReportsFragment"
             android:exported="false" />
         <activity
             android:name=".activity.NoInternetActivity"
@@ -52,10 +52,6 @@
         <activity
             android:name=".activity.PaymentSuccessActivity"
             android:exported="false" />
-        <activity
-            android:name=".fragment.HomeFragment"
-            android:exported="false" />
-
         <meta-data
             android:name="com.mapbox.token"
             android:value="@string/mapbox_access_token" />
@@ -76,15 +72,14 @@
         <activity
             android:name=".activity.SignUpActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+<!--        <activity-->
+<!--            android:name=".activity.SplashActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
 
 </manifest>
