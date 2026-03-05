@@ -2,6 +2,7 @@ package com.iamlaky.emergency119.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,10 +14,18 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iamlaky.emergency119.R;
 import com.mapbox.android.gestures.MoveGestureDetector;
@@ -38,14 +47,15 @@ public class MapActivity extends AppCompatActivity {
 
     private MapView mapView;
     private Point currentPoint;
+    private static final int REQUEST_CHECK_SETTINGS = 1001;
 
     private final ActivityResultLauncher<String[]> locationPermissionRequest =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 Boolean fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
                 if (fineLocationGranted != null && fineLocationGranted) {
-                    setupMap();
+                    enableGPSAndSetupMap();
                 } else {
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
                     goToHome();
                 }
             });
@@ -73,7 +83,7 @@ public class MapActivity extends AppCompatActivity {
                 String address = getAddressFromLatLng(currentPoint.latitude(), currentPoint.longitude());
                 Log.d("REPORT_DATA", "Lat: " + currentPoint.latitude() + ", Lng: " + currentPoint.longitude());
                 Log.d("REPORT_DATA", "Address: " + address);
-                Toast.makeText(this, "Address: " + address, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Emergency Reported at: " + address, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -82,7 +92,42 @@ public class MapActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationPermissionRequest.launch(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
         } else {
-            setupMap();
+            enableGPSAndSetupMap();
+        }
+    }
+
+    private void enableGPSAndSetupMap() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, locationSettingsResponse -> setupMap());
+
+        task.addOnFailureListener(this, e -> {
+            if (e instanceof ResolvableApiException) {
+                try {
+                    ResolvableApiException resolvable = (ResolvableApiException) e;
+                    resolvable.startResolutionForResult(MapActivity.this, REQUEST_CHECK_SETTINGS);
+                } catch (IntentSender.SendIntentException sendEx) {
+                    sendEx.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == RESULT_OK) {
+                setupMap();
+            } else {
+                Toast.makeText(this, "GPS must be on to report", Toast.LENGTH_SHORT).show();
+                goToHome();
+            }
         }
     }
 
@@ -122,7 +167,7 @@ public class MapActivity extends AppCompatActivity {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             if (addresses != null && !addresses.isEmpty()) return addresses.get(0).getAddressLine(0);
         } catch (IOException e) { e.printStackTrace(); }
-        return "No Address Found";
+        return "Address Not Found";
     }
 
     private void zoomToLocation(Point point) {
