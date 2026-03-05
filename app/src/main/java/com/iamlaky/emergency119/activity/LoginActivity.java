@@ -8,21 +8,26 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.iamlaky.emergency119.databinding.ActivityLoginBinding;
 import com.iamlaky.emergency119.fragment.HomeFragment;
 import com.iamlaky.emergency119.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private ActivityLoginBinding binding;
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        TextView tvSignUpLink = findViewById(R.id.tvSignUpLink);
-        TextView tvForgotPass = findViewById(R.id.tvForgotPass);
-        AppCompatButton btnLogin = findViewById(R.id.btnLogin);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        tvSignUpLink.setOnClickListener(new View.OnClickListener() {
+        setContentView(binding.getRoot());
+
+        binding.tvSignUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
@@ -32,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        tvForgotPass.setOnClickListener(new View.OnClickListener() {
+        binding.tvForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
@@ -42,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
