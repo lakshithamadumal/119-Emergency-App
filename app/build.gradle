@@ -48,6 +48,9 @@ dependencies {
     
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
