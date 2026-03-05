@@ -53,14 +53,14 @@
 
         <meta-data
             android:name="com.mapbox.token"
-            android:value="pk.eyJ1IjoibGFreTIwMDMiLCJhIjoiY21sbmdpdXE4MHNsdDNlcHVkb2FtYWQ0ZiJ9.Nj48QIGZ9wSy8Zuw7NEUjQ" />
+            android:value="@string/mapbox_access_token" />
 
         <activity
             android:name=".activity.MapActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.SendReportActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ResetPasswordActivity"
@@ -72,7 +72,7 @@
             android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SendReportActivity"
+            android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
