@@ -47,18 +47,15 @@ public class MainActivity extends AppCompatActivity {
         flSettings = findViewById(R.id.flSettings);
         btnCall = findViewById(R.id.btnCall);
 
-        // පළමුවෙන්ම Home Fragment එක පෙන්වන්න
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment(), 0);
         }
 
-        // Click Listeners
         flHome.setOnClickListener(v -> loadFragment(new HomeFragment(), 0));
         flDoc.setOnClickListener(v -> loadFragment(new ReportsFragment(), 1));
         flProfile.setOnClickListener(v -> loadFragment(new ProfileFragment(), 2));
         flSettings.setOnClickListener(v -> loadFragment(new SettingsFragment(), 3));
 
-        // මැද SOS/Call button එක එබුවම කෙලින්ම Map Activity එකට යන්න
         btnCall.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
             startActivity(intent);
@@ -66,24 +63,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFragment(Fragment fragment, int index) {
-        // Fragment එක මාරු කිරීම
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
 
-        // Bottom Bar එකේ Icons වල Background පාට මාරු කිරීම (Highlight)
         updateNavUI(index);
     }
 
     private void updateNavUI(int selectedIndex) {
-        // සියලුම icons වලට සාමාන්‍ය background එක ලබා දීම
         flHome.setBackgroundResource(R.drawable.nav_icon_bg);
         flDoc.setBackgroundResource(R.drawable.nav_icon_bg);
         flProfile.setBackgroundResource(R.drawable.nav_icon_bg);
         flSettings.setBackgroundResource(R.drawable.nav_icon_bg);
 
-        // තෝරාගත් icon එකේ background එක රතු/පාට background එකට මාරු කිරීම
         switch (selectedIndex) {
             case 0: flHome.setBackgroundResource(R.drawable.home_icon_bg); break;
             case 1: flDoc.setBackgroundResource(R.drawable.home_icon_bg); break;

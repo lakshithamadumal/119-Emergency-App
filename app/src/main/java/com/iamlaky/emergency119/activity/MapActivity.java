@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.iamlaky.emergency119.fragment.HomeFragment;
 import com.iamlaky.emergency119.R;
 import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.geojson.Point;
@@ -175,7 +176,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void goToHome() {
-        startActivity(new Intent(this, HomeActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
