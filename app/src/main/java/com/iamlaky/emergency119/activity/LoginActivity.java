@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             binding.btnLogin.setEnabled(false);
+            binding.btnLogin.setText("Logging in...");
             binding.btnLogin.setAlpha(0.5f);
 
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
@@ -67,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                                 long currentTime = System.currentTimeMillis();
 
                                 if ("Active".equals(user.getPaymentStatus()) && user.getExpiryDate() > currentTime) {
-                                    // Payment OK -> MainActivity
                                     Toast.makeText(LoginActivity.this, "Login Successful.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
@@ -81,17 +81,16 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     }).addOnFailureListener(e -> {
-                        binding.btnLogin.setEnabled(true);
-                        binding.btnLogin.setAlpha(1.0f);
+                        resetLoginButton();
                         Toast.makeText(LoginActivity.this, "Error fetching user data.", Toast.LENGTH_SHORT).show();
                     });
 
                 } else {
-                    binding.btnLogin.setEnabled(true);
-                    binding.btnLogin.setAlpha(1.0f);
+                    resetLoginButton();
                     Toast.makeText(LoginActivity.this, "Invalid email or password.", Toast.LENGTH_SHORT).show();
                 }
             });
+
         });
 
 /// Goto SignUp Activity
@@ -110,9 +109,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUI(FirebaseUser user) {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+    private void resetLoginButton() {
+        binding.btnLogin.setEnabled(true);
+        binding.btnLogin.setText("LOGIN");
+        binding.btnLogin.setAlpha(1.0f);
     }
 }
