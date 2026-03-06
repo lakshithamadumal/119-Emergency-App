@@ -69,28 +69,46 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             binding.btnSignUp.setEnabled(false);
+            binding.btnSignUp.setText("Creating Account...");
             binding.btnSignUp.setAlpha(0.5f);
 
             firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     String uid = task.getResult().getUser().getUid();
 
-                    User user = User.builder().uid(uid).name(fullName).email(email).paymentStatus("Pending").expiryDate(0).totalReports(0).profilePicUrl("").phoneNumber("").address("").nicNumber("").bloodGroup("").allergies("").medicalConditions("").currentMedications("").build();
+                    User user = User.builder()
+                            .uid(uid)
+                            .name(fullName)
+                            .email(email)
+                            .paymentStatus("Pending")
+                            .expiryDate(0)
+                            .totalReports(0)
+                            .profilePicUrl("")
+                            .phoneNumber("")
+                            .address("")
+                            .nicNumber("")
+                            .emergencyNick1("")
+                            .emergencyContact1("")
+                            .emergencyNick2("")
+                            .emergencyContact2("")
+                            .bloodGroup("")
+                            .allergies("")
+                            .medicalConditions("")
+                            .currentMedications("")
+                            .build();
 
                     firebaseFirestore.collection("users").document(uid).set(user).addOnSuccessListener(unused -> {
                         Toast.makeText(SignUpActivity.this, "Account Created! Please subscribe.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignUpActivity.this, SubscribtionActivity.class);
                         startActivity(intent);
-                        finish(); //
+                        finish();
                     }).addOnFailureListener(e -> {
-                        binding.btnSignUp.setEnabled(true);
-                        binding.btnSignUp.setAlpha(1.0f);
+                        resetSignUpButton();
                         Toast.makeText(SignUpActivity.this, "Database Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
 
                 } else {
-                    binding.btnSignUp.setEnabled(true);
-                    binding.btnSignUp.setAlpha(1.0f);
+                    resetSignUpButton();
                     String error = task.getException() != null ? task.getException().getMessage() : "Sign Up Failed";
                     Toast.makeText(SignUpActivity.this, error, Toast.LENGTH_SHORT).show();
                 }
@@ -104,5 +122,10 @@ public class SignUpActivity extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
+    }
+    private void resetSignUpButton() {
+        binding.btnSignUp.setEnabled(true);
+        binding.btnSignUp.setText("SIGN UP");
+        binding.btnSignUp.setAlpha(1.0f);
     }
 }
