@@ -8,21 +8,32 @@ import android.view.View;
 import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.fragment.HomeFragment;
 import com.iamlaky.emergency119.fragment.ProfileFragment;
 import com.iamlaky.emergency119.fragment.ReportsFragment;
 import com.iamlaky.emergency119.fragment.SettingsFragment;
+import com.iamlaky.emergency119.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private FrameLayout flHome, flDoc, flProfile, flSettings, btnCall;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        // MainActivity.java
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel.getUser(firebaseAuth.getUid()).observe(this, user -> {
+        });
 
         View pulseCallView = findViewById(R.id.pulseCallView);
         // Call Button Animation

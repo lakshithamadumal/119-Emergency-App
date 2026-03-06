@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="sans-serif-black"
-                android:text="Loading..."
+                android:text=""
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -63,7 +63,7 @@
                 android:id="@+id/tvUserEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loading..."
+                android:text=""
                 android:textColor="#9EA1B1"
                 android:textSize="14sp" />
 
