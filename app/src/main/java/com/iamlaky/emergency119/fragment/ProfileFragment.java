@@ -87,6 +87,9 @@ public class ProfileFragment extends Fragment {
         String uid = firebaseAuth.getUid();
         if (uid == null) return;
 
+        binding.btnUpdate.setEnabled(false);
+        binding.btnUpdate.setText("Updating...");
+
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", binding.inputFullName.etInputValue.getText().toString().trim());
         updates.put("phoneNumber", binding.inputPhone.etInputValue.getText().toString().trim());
@@ -97,11 +100,34 @@ public class ProfileFragment extends Fragment {
         updates.put("emergencyNick2", binding.etNick2.getText().toString().trim());
         updates.put("emergencyContact2", binding.etEmergencyNum2.getText().toString().trim());
 
-        FirebaseFirestore.getInstance()
-                .collection("users").document(uid).update(updates)
-                .addOnSuccessListener(unused ->
-                        Toast.makeText(getContext(), "Profile updated!", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        FirebaseFirestore.getInstance().collection("users").document(uid).update(updates).addOnSuccessListener(unused -> {
+            binding.btnUpdate.setEnabled(true);
+            binding.btnUpdate.setText("UPDATE");
+
+            clearFormFocus();
+
+            Toast.makeText(getContext(), "Profile updated!", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            binding.btnUpdate.setEnabled(true);
+            binding.btnUpdate.setText("UPDATE");
+            Toast.makeText(getContext(), "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void clearFormFocus() {
+        binding.inputFullName.etInputValue.clearFocus();
+        binding.inputPhone.etInputValue.clearFocus();
+        binding.inputAddress.etInputValue.clearFocus();
+        binding.inputNIC.etInputValue.clearFocus();
+        binding.etNick1.clearFocus();
+        binding.etEmergencyNum1.clearFocus();
+        binding.etNick2.clearFocus();
+        binding.etEmergencyNum2.clearFocus();
+
+        if (getActivity() != null && getActivity().getCurrentFocus() != null) {
+            android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getActivity().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     private void setupInput(View inputView, String label, String value, String hint) {

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        // MainActivity.java
+/// ViewModel get
         UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.getUser(firebaseAuth.getUid()).observe(this, user -> {
         });
