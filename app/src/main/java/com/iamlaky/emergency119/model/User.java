@@ -19,7 +19,9 @@ public class User {
     private String phoneNumber;
     private String address;
     private String nicNumber;
+    private String emergencyNick1;
     private String emergencyContact1;
+    private String emergencyNick2;
     private String emergencyContact2;
     private int totalReports;
 
