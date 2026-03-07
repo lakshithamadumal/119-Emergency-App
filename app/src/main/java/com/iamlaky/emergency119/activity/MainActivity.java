@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.iamlaky.emergency119.R;
@@ -23,6 +25,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< Updated upstream
+=======
+        firebaseAuth = FirebaseAuth.getInstance();
+
+/// ViewModel get
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel.getUser(firebaseAuth.getUid()).observe(this, user -> {
+            if (user != null) {
+                if ("Expired".equals(user.getPaymentStatus())) {
+                    redirectToSubscription();
+                }
+            }
+        });
+>>>>>>> Stashed changes
 
         View pulseCallView = findViewById(R.id.pulseCallView);
         // Call Button Animation
@@ -83,5 +99,16 @@ public class MainActivity extends AppCompatActivity {
             case 2: flProfile.setBackgroundResource(R.drawable.home_icon_bg); break;
             case 3: flSettings.setBackgroundResource(R.drawable.home_icon_bg); break;
         }
+    }
+
+    private void redirectToSubscription() {
+        Toast.makeText(this, "Your subscription has expired. Please renew.", Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(MainActivity.this, SubscribtionActivity.class);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        startActivity(intent);
+        finish();
     }
 }
