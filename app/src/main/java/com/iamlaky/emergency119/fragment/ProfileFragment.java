@@ -1,7 +1,10 @@
 package com.iamlaky.emergency119.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,14 +28,30 @@ import com.iamlaky.emergency119.databinding.FragmentProfileBinding;
 import com.iamlaky.emergency119.model.User;
 import com.iamlaky.emergency119.viewmodel.UserViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
     private UserViewModel userViewModel;
     private FirebaseAuth firebaseAuth;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Nullable
     @Override
@@ -56,6 +77,22 @@ public class ProfileFragment extends Fragment {
 
         binding.btnUpdate.setOnClickListener(v -> {
             updateProfileData();
+        });
+
+
+        binding.ivProfileImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            imagePickerLauncher.launch(intent);
+        });
+
+        ///  Gallery
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                Uri imageUri = result.getData().getData();
+                if (imageUri != null) {
+                    uploadImageToImgBB(imageUri);
+                }
+            }
         });
 
         return binding.getRoot();
@@ -127,6 +164,74 @@ public class ProfileFragment extends Fragment {
         if (getActivity() != null && getActivity().getCurrentFocus() != null) {
             android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getActivity().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    private void uploadImageToImgBB(Uri imageUri) {
+        binding.btnUpdate.setEnabled(false);
+        Toast.makeText(getContext(), "Uploading image...", Toast.LENGTH_SHORT).show();
+
+        try {
+            InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri);
+            byte[] bytes = getBytes(inputStream);
+
+            RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("key", "a3c8d35257779a06bdc4b306d992a25a").addFormDataPart("image", "profile.jpg", RequestBody.create(bytes, MediaType.parse("image/*"))).build();
+
+            Request request = new Request.Builder().url("https://api.imgbb.com/1/upload").post(requestBody).build();
+
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    getActivity().runOnUiThread(() -> {
+                        binding.btnUpdate.setEnabled(true);
+                        Toast.makeText(getContext(), "Upload Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String responseData = response.body().string();
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            /// Get Direct Link
+                            String imageUrl = jsonObject.getJSONObject("data").getString("url");
+
+                            saveImageUrlToFirestore(imageUrl);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+    private void saveImageUrlToFirestore(String url) {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            FirebaseFirestore.getInstance().collection("users").document(uid).update("profilePicUrl", url).addOnSuccessListener(unused -> {
+                getActivity().runOnUiThread(() -> {
+                    binding.btnUpdate.setEnabled(true);
+                    Toast.makeText(getContext(), "Profile Picture Updated!", Toast.LENGTH_SHORT).show();
+                });
+            });
         }
     }
 
