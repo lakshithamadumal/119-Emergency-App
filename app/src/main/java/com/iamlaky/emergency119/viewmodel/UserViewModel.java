@@ -25,13 +25,27 @@ public class UserViewModel extends ViewModel {
                 User user = snapshot.toObject(User.class);
 
                 if (user != null) {
-                    long currentTime = System.currentTimeMillis();
-                    if (user.getExpiryDate() != 0 && user.getExpiryDate() < currentTime) {
-                        user.setPaymentStatus("Expired");
-                    }
-                    userLiveData.setValue(user);
+                    validateSubscription(user, uid);
                 }
             }
         });
+    }
+
+    private void validateSubscription(User user, String uid) {
+        long currentTime = System.currentTimeMillis();
+        String currentStatus = user.getPaymentStatus();
+
+        if ("Active".equals(currentStatus)) {
+            if (user.getExpiryDate() != 0 && user.getExpiryDate() < currentTime) {
+
+                user.setPaymentStatus("Expired");
+
+                db.collection("users").document(uid).update("paymentStatus", "Expired");
+                db.collection("users").document(uid).update("expiryDate", 0);
+            }
+        } else if ("Pending".equals(currentStatus)) {
+            user.setPaymentStatus("Expired");
+        }
+        userLiveData.setValue(user);
     }
 }
