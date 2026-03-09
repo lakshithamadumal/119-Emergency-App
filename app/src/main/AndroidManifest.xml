@@ -65,7 +65,7 @@
             android:name=".activity.SendReportActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ResetPasswordActivity"
+            android:name=".activity.ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
