@@ -11,21 +11,36 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.activity.MapActivity;
 import com.iamlaky.emergency119.activity.MedicalInfoActivity;
 import com.iamlaky.emergency119.activity.NotificationActivity;
 import com.iamlaky.emergency119.databinding.FragmentHomeBinding;
+import com.iamlaky.emergency119.viewmodel.ReportViewModel;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private ReportViewModel reportViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+        reportViewModel = new ViewModelProvider(this).get(ReportViewModel.class);
+
+        reportViewModel.allReportsCount.observe(getViewLifecycleOwner(), count -> {
+            if (count != null) {
+                String displayCount = "+" + count;
+                binding.tvAllReportsCount.setText(displayCount);
+            }
+        });
+
+        reportViewModel.fetchAllReportsCount();
+
         return binding.getRoot();
     }
 

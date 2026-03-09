@@ -115,6 +115,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tvAllReportsCount"
             android:layout_width="110dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
