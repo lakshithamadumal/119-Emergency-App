@@ -22,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.activity.LoginActivity;
+import com.iamlaky.emergency119.activity.NotificationActivity;
+import com.iamlaky.emergency119.activity.ResetPasswordActivity;
 import com.iamlaky.emergency119.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
@@ -66,6 +68,10 @@ public class SettingsFragment extends Fragment {
         });
 
         binding.btnLogout.setOnClickListener(v -> showLogoutConfirmation());
+
+        binding.resetPasswordBtn.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), ResetPasswordActivity.class));
+        });
     }
 
     private void updateSwitches() {
