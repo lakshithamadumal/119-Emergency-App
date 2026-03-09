@@ -16,9 +16,9 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme._119.FullScreen" parent="Theme._119">
-        <item name="android:windowFullscreen">true</item>
-    </style>
+<!--    <style name="Theme._119.FullScreen" parent="Theme._119">-->
+<!--        <item name="android:windowFullscreen">true</item>-->
+<!--    </style>-->
 
     <style name="FeatureRow">
         <item name="android:layout_width">match_parent</item>
