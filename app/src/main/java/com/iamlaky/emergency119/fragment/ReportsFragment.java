@@ -33,12 +33,12 @@ public class ReportsFragment extends Fragment {
         rvReports.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Data List
-        reportList = new ArrayList<>();
-        reportList.add(new Report("Car Crash", "Highlevel Rd, Maharagama", "10:30 AM", "Received", "Car Accident"));
-        reportList.add(new Report("House Fire", "Kandy Town", "09:15 AM", "In Progress", "Fire"));
-        reportList.add(new Report("Assault", "Nugegoda", "Yesterday", "Assigned", "Women Safety"));
-        reportList.add(new Report("Heart Attack", "Colombo 03", "2 hours ago", "Completed", "Medical Emergency"));
-        reportList.add(new Report("No Electricity", "Matara", "Just Now", "Received", "Power Outage"));
+//        reportList = new ArrayList<>();
+//        reportList.add(new Report("Car Crash", "Highlevel Rd, Maharagama", "10:30 AM", "Received", "Car Accident"));
+//        reportList.add(new Report("House Fire", "Kandy Town", "09:15 AM", "In Progress", "Fire"));
+//        reportList.add(new Report("Assault", "Nugegoda", "Yesterday", "Assigned", "Women Safety"));
+//        reportList.add(new Report("Heart Attack", "Colombo 03", "2 hours ago", "Completed", "Medical Emergency"));
+//        reportList.add(new Report("No Electricity", "Matara", "Just Now", "Received", "Power Outage"));
 
         adapter = new ReportAdapter(reportList);
         rvReports.setAdapter(adapter);

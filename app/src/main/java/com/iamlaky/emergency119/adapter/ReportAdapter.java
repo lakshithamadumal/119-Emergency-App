@@ -31,30 +31,30 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     public void onBindViewHolder(@NonNull ReportViewHolder holder, int position) {
         Report report = reportList.get(position);
 
-        holder.tvTitle.setText(report.getTitle());
-        holder.tvLocation.setText(report.getLocation());
-        holder.tvStatus.setText(report.getStatus());
+//        holder.tvTitle.setText(report.getTitle());
+//        holder.tvLocation.setText(report.getLocation());
+//        holder.tvStatus.setText(report.getStatus());
+//
+//        switch (report.getStatus()) {
+//            case "Received":
+//                holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
+//                holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));                break;
+//            case "Assigned":
+//            case "In Progress":
+//                holder.tvStatus.setBackgroundResource(R.drawable.report_status_yellow);
+//                holder.tvStatus.setTextColor(Color.parseColor("#ffb400"));
+//                break;
+//            case "Completed":
+//                holder.tvStatus.setBackgroundResource(R.drawable.report_status_green);
+//                holder.tvStatus.setTextColor(Color.parseColor("#56ca00"));
+//                break;
+//            default:
+//                holder.tvStatus.setBackgroundColor(Color.LTGRAY);
+//                holder.tvStatus.setTextColor(Color.BLACK);
+//                break;
+//        }
 
-        switch (report.getStatus()) {
-            case "Received":
-                holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
-                holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));                break;
-            case "Assigned":
-            case "In Progress":
-                holder.tvStatus.setBackgroundResource(R.drawable.report_status_yellow);
-                holder.tvStatus.setTextColor(Color.parseColor("#ffb400"));
-                break;
-            case "Completed":
-                holder.tvStatus.setBackgroundResource(R.drawable.report_status_green);
-                holder.tvStatus.setTextColor(Color.parseColor("#56ca00"));
-                break;
-            default:
-                holder.tvStatus.setBackgroundColor(Color.LTGRAY);
-                holder.tvStatus.setTextColor(Color.BLACK);
-                break;
-        }
-
-        int iconRes;
+//        int iconRes;
 //        switch (report.getCategory()) {
 //            case "Car Accident":
 //                iconRes = R.drawable.ic_emergency_car_accident;
