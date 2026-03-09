@@ -8,7 +8,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -16,7 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -26,13 +24,11 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.iamlaky.emergency119.fragment.HomeFragment;
 import com.iamlaky.emergency119.R;
+import com.iamlaky.emergency119.databinding.ActivityMapBinding;
 import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
-import com.mapbox.maps.MapView;
 import com.mapbox.maps.Style;
 import com.mapbox.maps.plugin.LocationPuck2D;
 import com.mapbox.maps.plugin.gestures.GesturesUtils;
@@ -46,7 +42,7 @@ import java.util.Locale;
 
 public class MapActivity extends AppCompatActivity {
 
-    private MapView mapView;
+    private ActivityMapBinding binding;
     private Point currentPoint;
     private static final int REQUEST_CHECK_SETTINGS = 1001;
 
@@ -64,27 +60,27 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
 
-        mapView = findViewById(R.id.mapView);
-        ImageButton btnMapBack = findViewById(R.id.btnMapBack);
-        FloatingActionButton btnCurrentLocation = findViewById(R.id.btnCurrentLocation);
-        AppCompatButton btnSendReport = findViewById(R.id.btnSendReport);
+        binding = ActivityMapBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         checkPermissions();
 
-        btnMapBack.setOnClickListener(v -> goToHome());
+        binding.btnMapBack.setOnClickListener(v -> goToHome());
 
-        btnCurrentLocation.setOnClickListener(v -> {
+        binding.btnCurrentLocation.setOnClickListener(v -> {
             if (currentPoint != null) zoomToLocation(currentPoint);
         });
 
-        btnSendReport.setOnClickListener(v -> {
+        binding.btnSendReport.setOnClickListener(v -> {
             if (currentPoint != null) {
                 String address = getAddressFromLatLng(currentPoint.latitude(), currentPoint.longitude());
                 Log.d("REPORT_DATA", "Lat: " + currentPoint.latitude() + ", Lng: " + currentPoint.longitude());
                 Log.d("REPORT_DATA", "Address: " + address);
                 Toast.makeText(this, "Emergency Reported at: " + address, Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(MapActivity.this, SendReportActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -133,14 +129,14 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void setupMap() {
-        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
+        binding.mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
             enableLocationComponent();
             setupMapGestures();
         });
     }
 
     private void enableLocationComponent() {
-        LocationComponentPlugin locationComponentPlugin = LocationComponentUtils.getLocationComponent(mapView);
+        LocationComponentPlugin locationComponentPlugin = LocationComponentUtils.getLocationComponent(binding.mapView);
         locationComponentPlugin.setEnabled(true);
         locationComponentPlugin.setLocationPuck(new LocationPuck2D());
         locationComponentPlugin.addOnIndicatorPositionChangedListener(point -> {
@@ -150,14 +146,14 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void setupMapGestures() {
-        GesturesUtils.getGestures(mapView).addOnMoveListener(new OnMoveListener() {
+        GesturesUtils.getGestures(binding.mapView).addOnMoveListener(new OnMoveListener() {
             @Override
             public void onMoveBegin(@NonNull MoveGestureDetector detector) {}
             @Override
             public boolean onMove(@NonNull MoveGestureDetector detector) { return false; }
             @Override
             public void onMoveEnd(@NonNull MoveGestureDetector detector) {
-                currentPoint = mapView.getMapboxMap().getCameraState().getCenter();
+                currentPoint = binding.mapView.getMapboxMap().getCameraState().getCenter();
             }
         });
     }
@@ -172,11 +168,10 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void zoomToLocation(Point point) {
-        mapView.getMapboxMap().setCamera(new CameraOptions.Builder().center(point).zoom(16.0).build());
+        binding.mapView.getMapboxMap().setCamera(new CameraOptions.Builder().center(point).zoom(16.0).build());
     }
 
     private void goToHome() {
-        startActivity(new Intent(this, MainActivity.class));
         finish();
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }

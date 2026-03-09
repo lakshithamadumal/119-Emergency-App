@@ -1,58 +1,47 @@
 package com.iamlaky.emergency119.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ReportFragment;
+
 import com.iamlaky.emergency119.R;
+import com.iamlaky.emergency119.databinding.ActivityViewReportBinding;
 
 public class ViewReportActivity extends AppCompatActivity {
 
-    private ImageView ivCategoryIcon;
-    private TextView tvTitle, tvLocation, tvStatusBadge, tvDateTime, tvRefId;
-    private ImageButton btnBack;
+    private ActivityViewReportBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_report);
 
-        initViews();
+        binding = ActivityViewReportBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        btnBack.setOnClickListener(v -> finish());
+        binding.btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(ViewReportActivity.this, ReportFragment.class);
+            intent.putExtra("TARGET_FRAGMENT", "REPORT_FRAGMENT");
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+
+            finish();
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        });
 
         setupTimelineData();
     }
 
-    private void initViews() {
-        btnBack = findViewById(R.id.btnBack);
-        ivCategoryIcon = findViewById(R.id.ivCategoryIcon);
-        tvTitle = findViewById(R.id.tvReportTitleDetail);
-        tvLocation = findViewById(R.id.tvLocationDetail);
-        tvStatusBadge = findViewById(R.id.tvStatusBadgeDetail);
-        tvDateTime = findViewById(R.id.tvDateTimeDetail);
-        tvRefId = findViewById(R.id.tvReferenceId);
-    }
-
     private void setupTimelineData() {
-        View step1 = findViewById(R.id.stepReceived);
-        updateStep(step1, "Received", "11:45 AM", "Emergency request received by the system.", true);
+        updateStep(binding.stepReceived.getRoot(), "Received", "11:45 AM", "Emergency request received by the system.", true);
+        updateStep(binding.stepAssigned.getRoot(), "Assigned", "11:50 AM", "An officer has been assigned to your location.", true);
+        updateStep(binding.stepInProgress.getRoot(), "In Progress", "12:05 PM", "Help is on the way to your location.", true);
+        updateStep(binding.stepCompleted.getRoot(), "Completed", "12:30 PM", "The emergency has been successfully resolved.", false);
 
-        View step2 = findViewById(R.id.stepAssigned);
-        updateStep(step2, "Assigned", "11:50 AM", "An officer has been assigned to your location.", true);
-
-        View step3 = findViewById(R.id.stepInProgress);
-        updateStep(step3, "In Progress", "12:05 PM", "Help is on the way to your location.", true);
-
-        View step4 = findViewById(R.id.stepCompleted);
-        updateStep(step4, "Completed", "12:30 PM", "The emergency has been successfully resolved.", false);
-
-        step4.findViewById(R.id.dot).setBackgroundResource(R.drawable.timeline_dot_green);
-
-        step1.findViewById(R.id.dot).setBackgroundResource(R.drawable.timeline_dot_blue);
-
+        binding.stepCompleted.dot.setBackgroundResource(R.drawable.timeline_dot_green);
+        binding.stepReceived.dot.setBackgroundResource(R.drawable.timeline_dot_blue);
     }
 
     private void updateStep(View stepView, String status, String time, String desc, boolean showLine) {

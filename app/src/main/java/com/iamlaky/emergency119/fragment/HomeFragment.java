@@ -36,13 +36,7 @@ public class HomeFragment extends Fragment {
         startPulseAnimation();
 
         binding.sosButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), MapActivity.class);
-            startActivity(intent);
-
-            if (getActivity() != null) {
-                // Animation එක සකස් කිරීම
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            }
+            startActivity(new Intent(getActivity(), MapActivity.class));
         });
 
         binding.notificationContainer.setOnClickListener(v -> {

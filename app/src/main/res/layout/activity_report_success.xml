@@ -8,23 +8,6 @@
     android:background="#FBF6F8"
     tools:context=".activity.ReportSuccessActivity">
 
-    <ImageButton
-        android:id="@+id/btnClose"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="25dp"
-        android:background="@drawable/back_button_bg"
-        android:src="@drawable/ic_close"
-        android:scaleType="centerInside"
-
-        android:backgroundTint="@null"
-        android:stateListAnimator="@null"
-        android:elevation="4dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <ImageView
         android:id="@+id/ivSuccessIllustration"
         android:layout_width="220dp"

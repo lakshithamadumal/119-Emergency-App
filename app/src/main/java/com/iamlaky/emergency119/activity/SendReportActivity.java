@@ -1,16 +1,17 @@
 package com.iamlaky.emergency119.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.adapter.CategoryAdapter;
+import com.iamlaky.emergency119.databinding.ActivitySendReportBinding;
 import com.iamlaky.emergency119.model.Category;
 
 import java.util.ArrayList;
@@ -18,18 +19,35 @@ import java.util.List;
 
 public class SendReportActivity extends AppCompatActivity {
 
+    private ActivitySendReportBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_send_report);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+
+        binding = ActivitySendReportBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        RecyclerView rvCategories = findViewById(R.id.rvCategories);
+        setupCategoryRecyclerView();
+
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
+        binding.btnSubmit.setOnClickListener(v -> {
+            Intent intent = new Intent(SendReportActivity.this, ReportSuccessActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void setupCategoryRecyclerView() {
+        binding.rvCategories.setLayoutManager(new GridLayoutManager(this, 3));
 
         List<Category> categoryList = new ArrayList<>();
         categoryList.add(new Category("Fire", R.drawable.ic_emergency_fire));
@@ -44,6 +62,6 @@ public class SendReportActivity extends AppCompatActivity {
         categoryList.add(new Category("Other", R.drawable.ic_emergency_other));
 
         CategoryAdapter adapter = new CategoryAdapter(categoryList);
-        rvCategories.setAdapter(adapter);
+        binding.rvCategories.setAdapter(adapter);
     }
 }
