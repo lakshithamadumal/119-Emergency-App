@@ -74,11 +74,11 @@ public class MapActivity extends AppCompatActivity {
 
         binding.btnSendReport.setOnClickListener(v -> {
             if (currentPoint != null) {
-                String address = getAddressFromLatLng(currentPoint.latitude(), currentPoint.longitude());
-                Log.d("REPORT_DATA", "Lat: " + currentPoint.latitude() + ", Lng: " + currentPoint.longitude());
-                Log.d("REPORT_DATA", "Address: " + address);
-                Toast.makeText(this, "Emergency Reported at: " + address, Toast.LENGTH_LONG).show();
-
+//                String address = getAddressFromLatLng(currentPoint.latitude(), currentPoint.longitude());
+//                Log.d("REPORT_DATA", "Lat: " + currentPoint.latitude() + ", Lng: " + currentPoint.longitude());
+//                Log.d("REPORT_DATA", "Address: " + address);
+//                Toast.makeText(this, "Emergency Reported at: " + address, Toast.LENGTH_LONG).show();
+                binding.mapView.onStop();
                 Intent intent = new Intent(MapActivity.this, SendReportActivity.class);
                 startActivity(intent);
             }
