@@ -190,7 +190,6 @@ public class SendReportActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     incrementUserReportCount();
 
-                    Toast.makeText(this, "Report Submitted Successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, ReportSuccessActivity.class));
                     finish();
                 })
