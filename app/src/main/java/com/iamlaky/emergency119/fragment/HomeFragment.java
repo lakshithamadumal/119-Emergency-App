@@ -10,26 +10,50 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.activity.MapActivity;
+import com.iamlaky.emergency119.activity.MedicalInfoActivity;
+import com.iamlaky.emergency119.activity.NotificationActivity;
+import com.iamlaky.emergency119.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
+
+    private FragmentHomeBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        View pulseView = view.findViewById(R.id.pulseView);
-        ConstraintLayout sosButton = view.findViewById(R.id.sosButton);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // --- Button Animation (Pulse Effect) ---
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(pulseView, "scaleX", 1.0f, 2.0f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(pulseView, "scaleY", 1.0f, 2.0f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(pulseView, "alpha", 0.5f, 0f);
+        startPulseAnimation();
+
+        binding.sosButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), MapActivity.class);
+            startActivity(intent);
+
+            if (getActivity() != null) {
+                // Animation එක සකස් කිරීම
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
+        });
+
+        binding.notificationContainer.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), NotificationActivity.class));
+        });
+    }
+
+    private void startPulseAnimation() {
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(binding.pulseView, "scaleX", 1.0f, 2.0f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(binding.pulseView, "scaleY", 1.0f, 2.0f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(binding.pulseView, "alpha", 0.5f, 0f);
 
         scaleX.setRepeatCount(ObjectAnimator.INFINITE);
         scaleY.setRepeatCount(ObjectAnimator.INFINITE);
@@ -39,17 +63,11 @@ public class HomeFragment extends Fragment {
         animatorSet.playTogether(scaleX, scaleY, alpha);
         animatorSet.setDuration(1500);
         animatorSet.start();
+    }
 
-        // SOS Button Click Logic
-        sosButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), MapActivity.class);
-            startActivity(intent);
-
-            if (getActivity() != null) {
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            }
-        });
-
-        return view;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
