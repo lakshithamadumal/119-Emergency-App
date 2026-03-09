@@ -2,24 +2,13 @@ package com.iamlaky.emergency119.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.databinding.ActivityLoginBinding;
-import com.iamlaky.emergency119.fragment.HomeFragment;
-import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.model.User;
 
 public class LoginActivity extends AppCompatActivity {
@@ -103,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
 
 ///  Goto Forgot Password Activity
         binding.tvForgotPass.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         });

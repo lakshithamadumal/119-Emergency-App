@@ -6,18 +6,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.iamlaky.emergency119.databinding.ActivityResetPasswordBinding;
+import com.iamlaky.emergency119.databinding.ActivityForgotPasswordBinding;
 
-public class ResetPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends AppCompatActivity {
 
-    private ActivityResetPasswordBinding binding;
+    private ActivityForgotPasswordBinding binding;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityResetPasswordBinding.inflate(getLayoutInflater());
+        binding = ActivityForgotPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
