@@ -1,17 +1,28 @@
 package com.iamlaky.emergency119.model;
 
-public class Category {
-    private String name;
-    private int iconRes;
-    private boolean isSelected = false;
+import com.google.firebase.firestore.PropertyName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public Category(String name, int iconRes) {
-        this.name = name;
-        this.iconRes = iconRes;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Category {
+    private String categoryId;
+    private String name;
+    private String imageUrl;
+
+    @PropertyName("isSelected")
+    private boolean isSelected;
+
+    @PropertyName("isSelected")
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public String getName() { return name; }
-    public int getIconRes() { return iconRes; }
-    public boolean isSelected() { return isSelected; }
-    public void setSelected(boolean selected) { isSelected = selected; }
+    @PropertyName("isSelected")
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }
