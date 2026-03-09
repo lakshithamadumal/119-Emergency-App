@@ -187,7 +187,7 @@ public class SendReportActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("reports").document(customId)
                 .set(report)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Report Submitted Successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, ReportSuccessActivity.class));
                     finish();
                 })
