@@ -7,6 +7,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -16,11 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.adapter.CategoryAdapter;
-import com.iamlaky.emergency119.adapter.SelectedImageAdapter; // මම කලින් දුන්න Adapter එක
+import com.iamlaky.emergency119.adapter.SelectedImageAdapter;
 import com.iamlaky.emergency119.databinding.ActivitySendReportBinding;
 import com.iamlaky.emergency119.model.Category;
+import com.iamlaky.emergency119.model.Report;
 import com.iamlaky.emergency119.viewmodel.CategoryViewModel;
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
@@ -32,8 +36,27 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManagerKt;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SendReportActivity extends AppCompatActivity {
 
@@ -43,12 +66,12 @@ public class SendReportActivity extends AppCompatActivity {
     private List<Category> categoryList = new ArrayList<>();
 
     private List<Uri> selectedImageUris = new ArrayList<>();
+    private List<String> uploadedImageUrls = new ArrayList<>();
     private SelectedImageAdapter imageAdapter;
-    private static final int PICK_IMAGES_REQUEST = 101;
 
-    private double reportLat;
-    private double reportLng;
+    private double reportLat, reportLng;
     private String reportAddress;
+    private static final int PICK_IMAGES_REQUEST = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +82,7 @@ public class SendReportActivity extends AppCompatActivity {
 
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
+        // Map Intents
         reportLat = getIntent().getDoubleExtra("LATITUDE", 0.0);
         reportLng = getIntent().getDoubleExtra("LONGITUDE", 0.0);
         reportAddress = getIntent().getStringExtra("ADDRESS");
@@ -72,14 +96,118 @@ public class SendReportActivity extends AppCompatActivity {
         setupPreviewMap();
         setupCategoryRecyclerView();
         setupImageRecyclerView();
-
         observeViewModel();
 
         binding.btnBack.setOnClickListener(v -> finish());
+        binding.btnUploadGallery.setOnClickListener(v -> pickImages());
+        binding.btnSubmit.setOnClickListener(v -> validateAndStartUpload());
+    }
 
-        binding.btnUploadGallery.setOnClickListener(v -> pickImagesFromGallery());
+    private void validateAndStartUpload() {
+        Category selectedCat = categoryAdapter.getSelectedCategory();
+        int selectedId = binding.rgSeverity.getCheckedRadioButtonId();
+        RadioButton rb = findViewById(selectedId);
+        String severity = (rb != null) ? rb.getText().toString() : "";
+        String description = binding.etDescription.getText().toString().trim();
 
-        binding.btnSubmit.setOnClickListener(v -> validateAndSubmit());
+        if (selectedCat == null || severity.isEmpty() || description.isEmpty()) {
+            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        binding.btnSubmit.setEnabled(false);
+        uploadedImageUrls.clear();
+
+        if (!selectedImageUris.isEmpty()) {
+            uploadImagesToImgBB(0);
+        } else {
+            saveReportToFirestore();
+        }
+    }
+
+    private void uploadImagesToImgBB(int index) {
+        if (index >= selectedImageUris.size()) {
+            saveReportToFirestore();
+            return;
+        }
+
+        runOnUiThread(() -> binding.btnSubmit.setText("Uploading Image " + (index + 1) + "/" + selectedImageUris.size()));
+
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(selectedImageUris.get(index));
+            byte[] bytes = getBytes(inputStream);
+
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("key", "a3c8d35257779a06bdc4b306d992a25a")
+                    .addFormDataPart("image", "emergency_img_" + index + ".jpg",
+                            RequestBody.create(bytes, MediaType.parse("image/*")))
+                    .build();
+
+            Request request = new Request.Builder().url("https://api.imgbb.com/1/upload").post(requestBody).build();
+
+            new OkHttpClient().newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    handleFailure(e.getMessage());
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            uploadedImageUrls.add(jsonObject.getJSONObject("data").getString("url"));
+                            uploadImagesToImgBB(index + 1);
+                        } catch (Exception e) { handleFailure(e.getMessage()); }
+                    } else { handleFailure("Upload failed at server"); }
+                }
+            });
+        } catch (Exception e) { handleFailure(e.getMessage()); }
+    }
+
+    private void saveReportToFirestore() {
+        runOnUiThread(() -> binding.btnSubmit.setText("Finalizing Report..."));
+
+        String customId = "REP_" + new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date())
+                + "_" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+
+        Category cat = categoryAdapter.getSelectedCategory();
+        int selectedId = binding.rgSeverity.getCheckedRadioButtonId();
+        String severity = ((RadioButton) findViewById(selectedId)).getText().toString();
+
+        Report report = new Report(
+                customId, FirebaseAuth.getInstance().getUid(),
+                cat.getCategoryId(), cat.getName(),
+                reportLat, reportLng, reportAddress,
+                severity, binding.etDescription.getText().toString().trim(),
+                "Pending", new Date(), uploadedImageUrls
+        );
+
+        FirebaseFirestore.getInstance().collection("reports").document(customId)
+                .set(report)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Report Submitted Successfully!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, ReportSuccessActivity.class));
+                    finish();
+                })
+                .addOnFailureListener(e -> handleFailure(e.getMessage()));
+    }
+
+    private void handleFailure(String error) {
+        runOnUiThread(() -> {
+            binding.btnSubmit.setEnabled(true);
+            binding.btnSubmit.setText("SUBMIT REPORT");
+            Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) byteBuffer.write(buffer, 0, len);
+        return byteBuffer.toByteArray();
     }
 
     private void setupImageRecyclerView() {
@@ -88,11 +216,11 @@ public class SendReportActivity extends AppCompatActivity {
         binding.rvImagePreview.setAdapter(imageAdapter);
     }
 
-    private void pickImagesFromGallery() {
+    private void pickImages() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(Intent.createChooser(intent, "Select Emergency Images"), PICK_IMAGES_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Images"), PICK_IMAGES_REQUEST);
     }
 
     @Override
@@ -100,61 +228,26 @@ public class SendReportActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGES_REQUEST && resultCode == RESULT_OK && data != null) {
             if (data.getClipData() != null) {
-                int count = data.getClipData().getItemCount();
-                for (int i = 0; i < count; i++) {
+                for (int i = 0; i < data.getClipData().getItemCount(); i++)
                     selectedImageUris.add(data.getClipData().getItemAt(i).getUri());
-                }
-            } else if (data.getData() != null) {
-                selectedImageUris.add(data.getData());
-            }
+            } else if (data.getData() != null) selectedImageUris.add(data.getData());
             imageAdapter.notifyDataSetChanged();
         }
-    }
-
-    private void validateAndSubmit() {
-        Category selectedCat = categoryAdapter.getSelectedCategory();
-
-        int selectedId = binding.rgSeverity.getCheckedRadioButtonId();
-        RadioButton rb = findViewById(selectedId);
-        String severity = (rb != null) ? rb.getText().toString() : "";
-
-        String description = binding.etDescription.getText().toString().trim();
-
-        if (selectedCat == null) {
-            Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show();
-        } else if (severity.isEmpty()) {
-            Toast.makeText(this, "Please select severity level", Toast.LENGTH_SHORT).show();
-        } else if (description.isEmpty()) {
-            binding.etDescription.setError("Please describe the situation");
-        } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("🚨 REPORT READY\n");
-            sb.append("Category: ").append(selectedCat.getName()).append("\n");
-            sb.append("Severity: ").append(severity).append("\n");
-            sb.append("Location: ").append(reportLat).append(", ").append(reportLng).append("\n");
-            if (reportAddress != null) sb.append("Address: ").append(reportAddress).append("\n");
-            sb.append("Images: ").append(selectedImageUris.size()).append(" selected");
-
-            Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
-
-        }
-    }
-
-    private void observeViewModel() {
-        categoryViewModel.categories.observe(this, categories -> {
-            if (categories != null) {
-                categoryList.clear();
-                categoryList.addAll(categories);
-                categoryAdapter.notifyDataSetChanged();
-            }
-        });
-        categoryViewModel.fetchCategories();
     }
 
     private void setupCategoryRecyclerView() {
         binding.rvCategories.setLayoutManager(new GridLayoutManager(this, 3));
         categoryAdapter = new CategoryAdapter(categoryList);
         binding.rvCategories.setAdapter(categoryAdapter);
+    }
+
+    private void observeViewModel() {
+        categoryViewModel.categories.observe(this, categories -> {
+            categoryList.clear();
+            categoryList.addAll(categories);
+            categoryAdapter.notifyDataSetChanged();
+        });
+        categoryViewModel.fetchCategories();
     }
 
     private void setupPreviewMap() {
@@ -166,11 +259,10 @@ public class SendReportActivity extends AppCompatActivity {
     }
 
     private void addMarkerToMap(Point point) {
-        AnnotationPlugin annotationApi = AnnotationPluginImplKt.getAnnotations(binding.mapView);
-        PointAnnotationManager pointAnnotationManager = PointAnnotationManagerKt.createPointAnnotationManager(annotationApi, new AnnotationConfig());
-        PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions()
-                .withPoint(point)
+        AnnotationPlugin api = AnnotationPluginImplKt.getAnnotations(binding.mapView);
+        PointAnnotationManager manager = PointAnnotationManagerKt.createPointAnnotationManager(api, new AnnotationConfig());
+        PointAnnotationOptions opts = new PointAnnotationOptions().withPoint(point)
                 .withIconImage(android.graphics.BitmapFactory.decodeResource(getResources(), R.drawable.ic_location_preview_pin));
-        pointAnnotationManager.create(pointAnnotationOptions);
+        manager.create(opts);
     }
 }

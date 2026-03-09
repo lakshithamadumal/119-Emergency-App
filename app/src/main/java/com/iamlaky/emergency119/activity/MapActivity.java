@@ -77,11 +77,13 @@ public class MapActivity extends AppCompatActivity {
                 binding.btnSendReport.setEnabled(false);
                 binding.btnSendReport.setText("Fetching Address...");
 
+                String address = getAddressFromLatLng(currentPoint.latitude(), currentPoint.longitude());
                 binding.mapView.onStop();
 
                 Intent intent = new Intent(MapActivity.this, SendReportActivity.class);
                 intent.putExtra("LATITUDE", currentPoint.latitude());
                 intent.putExtra("LONGITUDE", currentPoint.longitude());
+                intent.putExtra("ADDRESS", address);
 
                 startActivity(intent);
 

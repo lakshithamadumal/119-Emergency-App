@@ -1,23 +1,35 @@
 package com.iamlaky.emergency119.model;
 
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.PropertyName;
+import com.google.firebase.firestore.ServerTimestamp;
+
+import java.util.Date;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@IgnoreExtraProperties
 public class Report {
-    private String title;
-    private String location;
-    private String dateTime;
+    private String reportId;
+    private String uid;
+    private String categoryId;
+    private String categoryName;
+    private double latitude;
+    private double longitude;
+    private String address;
+    private String severity;
+    private String message;
     private String status;
-    private String category;
 
-    public Report(String title, String location, String dateTime, String status, String category) {
-        this.title = title;
-        this.location = location;
-        this.dateTime = dateTime;
-        this.status = status;
-        this.category = category;
-    }
+    @ServerTimestamp
+    private Date timestamp;
 
-    public String getTitle() { return title; }
-    public String getLocation() { return location; }
-    public String getDateTime() { return dateTime; }
-    public String getStatus() { return status; }
-    public String getCategory() { return category; }
+    private List<String> imageUrls;
 }
