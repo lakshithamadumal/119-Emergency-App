@@ -54,18 +54,33 @@ public class ResetPasswordActivity extends AppCompatActivity {
         String newPwd = binding.inputNewPassword.etInputValue.getText().toString().trim();
         String confirmPwd = binding.inputConfirmPassword.etInputValue.getText().toString().trim();
 
-        if (currentPwd.isEmpty() || newPwd.isEmpty() || confirmPwd.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        if (currentPwd.isEmpty()) {
+            binding.inputCurrentPassword.etInputValue.setError("Current password is required");
+            binding.inputCurrentPassword.etInputValue.requestFocus();
             return;
         }
 
-        if (!newPwd.equals(confirmPwd)) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+        if (newPwd.isEmpty()) {
+            binding.inputNewPassword.etInputValue.setError("New password is required");
+            binding.inputNewPassword.etInputValue.requestFocus();
             return;
         }
 
         if (newPwd.length() < 6) {
-            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            binding.inputNewPassword.etInputValue.setError("Password must be at least 6 characters");
+            binding.inputNewPassword.etInputValue.requestFocus();
+            return;
+        }
+
+        if (confirmPwd.isEmpty()) {
+            binding.inputConfirmPassword.etInputValue.setError("Please confirm your password");
+            binding.inputConfirmPassword.etInputValue.requestFocus();
+            return;
+        }
+
+        if (!newPwd.equals(confirmPwd)) {
+            binding.inputConfirmPassword.etInputValue.setError("Passwords do not match");
+            binding.inputConfirmPassword.etInputValue.requestFocus();
             return;
         }
 
