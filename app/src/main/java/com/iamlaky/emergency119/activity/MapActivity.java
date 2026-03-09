@@ -74,13 +74,23 @@ public class MapActivity extends AppCompatActivity {
 
         binding.btnSendReport.setOnClickListener(v -> {
             if (currentPoint != null) {
-                String address = getAddressFromLatLng(currentPoint.latitude(), currentPoint.longitude());
-                Log.d("REPORT_DATA", "Lat: " + currentPoint.latitude() + ", Lng: " + currentPoint.longitude());
-                Log.d("REPORT_DATA", "Address: " + address);
-                Toast.makeText(this, "Emergency Reported at: " + address, Toast.LENGTH_LONG).show();
+                binding.btnSendReport.setEnabled(false);
+                binding.btnSendReport.setText("Fetching Address...");
+
+                binding.mapView.onStop();
 
                 Intent intent = new Intent(MapActivity.this, SendReportActivity.class);
+                intent.putExtra("LATITUDE", currentPoint.latitude());
+                intent.putExtra("LONGITUDE", currentPoint.longitude());
+
                 startActivity(intent);
+
+                binding.btnSendReport.postDelayed(() -> {
+                    binding.btnSendReport.setEnabled(true);
+                    binding.btnSendReport.setText("SEND REPORT");
+                }, 1000);
+            } else {
+                Toast.makeText(this, "Location not ready yet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -148,9 +158,14 @@ public class MapActivity extends AppCompatActivity {
     private void setupMapGestures() {
         GesturesUtils.getGestures(binding.mapView).addOnMoveListener(new OnMoveListener() {
             @Override
-            public void onMoveBegin(@NonNull MoveGestureDetector detector) {}
+            public void onMoveBegin(@NonNull MoveGestureDetector detector) {
+            }
+
             @Override
-            public boolean onMove(@NonNull MoveGestureDetector detector) { return false; }
+            public boolean onMove(@NonNull MoveGestureDetector detector) {
+                return false;
+            }
+
             @Override
             public void onMoveEnd(@NonNull MoveGestureDetector detector) {
                 currentPoint = binding.mapView.getMapboxMap().getCameraState().getCenter();
@@ -162,8 +177,11 @@ public class MapActivity extends AppCompatActivity {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-            if (addresses != null && !addresses.isEmpty()) return addresses.get(0).getAddressLine(0);
-        } catch (IOException e) { e.printStackTrace(); }
+            if (addresses != null && !addresses.isEmpty())
+                return addresses.get(0).getAddressLine(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return "Address Not Found";
     }
 
