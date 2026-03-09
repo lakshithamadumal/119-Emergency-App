@@ -20,7 +20,7 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_emergency_fire" />
+        android:src="@drawable/ic_placeholder" />
 
     </com.google.android.material.card.MaterialCardView>
 

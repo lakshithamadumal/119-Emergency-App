@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.model.Category;
 
@@ -34,29 +35,45 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Category category = categories.get(position);
-        holder.tvName.setText(category.getName());
-        holder.ivIcon.setImageResource(category.getIconRes());
 
-        // Select වුණාම border එකක් හෝ background එකක් මාරු කරන්න
+        holder.tvName.setText(category.getName());
+
+        Glide.with(holder.itemView.getContext())
+                .load(category.getImageUrl())
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_error)
+                .into(holder.ivIcon);
+
         if (selectedPosition == position) {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#FFE5E9")); // ලා රතු පාට
-            holder.cardView.setStrokeColor(Color.parseColor("#FF004D")); // තද රතු බෝඩරය
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#FFE5E9"));
+            holder.cardView.setStrokeColor(Color.parseColor("#FF004D"));
             holder.cardView.setStrokeWidth(4);
+            category.setSelected(true);
         } else {
             holder.cardView.setCardBackgroundColor(Color.WHITE);
             holder.cardView.setStrokeWidth(0);
+            category.setSelected(false);
         }
 
         holder.itemView.setOnClickListener(v -> {
             int previousSelected = selectedPosition;
-            selectedPosition = holder.getAdapterPosition();
+            selectedPosition = holder.getBindingAdapterPosition();
             notifyItemChanged(previousSelected);
             notifyItemChanged(selectedPosition);
         });
     }
 
+    public Category getSelectedCategory() {
+        if (selectedPosition != -1) {
+            return categories.get(selectedPosition);
+        }
+        return null;
+    }
+
     @Override
-    public int getItemCount() { return categories.size(); }
+    public int getItemCount() {
+        return categories != null ? categories.size() : 0;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivIcon;

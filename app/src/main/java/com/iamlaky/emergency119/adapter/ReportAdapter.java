@@ -55,27 +55,27 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         }
 
         int iconRes;
-        switch (report.getCategory()) {
-            case "Car Accident":
-                iconRes = R.drawable.ic_emergency_car_accident;
-                break;
-            case "Fire":
-                iconRes = R.drawable.ic_emergency_fire;
-                break;
-            case "Medical Emergency":
-                iconRes = R.drawable.ic_emergency_medical;
-                break;
-            case "Women Safety":
-                iconRes = R.drawable.ic_emergency_women_safety;
-                break;
-            case "Power Outage":
-                iconRes = R.drawable.ic_emergency_power_outage;
-                break;
-            default:
-                iconRes = R.drawable.ic_emergency_other;
-                break;
-        }
-        holder.ivIcon.setImageResource(iconRes);
+//        switch (report.getCategory()) {
+//            case "Car Accident":
+//                iconRes = R.drawable.ic_emergency_car_accident;
+//                break;
+//            case "Fire":
+//                iconRes = R.drawable.ic_emergency_fire;
+//                break;
+//            case "Medical Emergency":
+//                iconRes = R.drawable.ic_emergency_medical;
+//                break;
+//            case "Women Safety":
+//                iconRes = R.drawable.ic_emergency_women_safety;
+//                break;
+//            case "Power Outage":
+//                iconRes = R.drawable.ic_emergency_power_outage;
+//                break;
+//            default:
+//                iconRes = R.drawable.ic_emergency_other;
+//                break;
+//        }
+//        holder.ivIcon.setImageResource(iconRes);
     }
 
     @Override

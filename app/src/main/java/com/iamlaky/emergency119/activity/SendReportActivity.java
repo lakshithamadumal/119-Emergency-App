@@ -2,6 +2,9 @@ package com.iamlaky.emergency119.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -9,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.adapter.CategoryAdapter;
 import com.iamlaky.emergency119.databinding.ActivitySendReportBinding;
@@ -29,6 +34,9 @@ import java.util.List;
 public class SendReportActivity extends AppCompatActivity {
 
     private ActivitySendReportBinding binding;
+    private FirebaseFirestore firebaseFirestore;
+    private CategoryAdapter adapter;
+    private List<Category> categoryList;
 
     private double reportLat;
     private double reportLng;
@@ -40,11 +48,19 @@ public class SendReportActivity extends AppCompatActivity {
         binding = ActivitySendReportBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        categoryList = new ArrayList<>();
+
         reportLat = getIntent().getDoubleExtra("LATITUDE", 0.0);
         reportLng = getIntent().getDoubleExtra("LONGITUDE", 0.0);
 
-        setupPreviewMap();
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
+        setupPreviewMap();
         setupCategoryRecyclerView();
 
         binding.btnBack.setOnClickListener(v -> finish());
@@ -58,10 +74,7 @@ public class SendReportActivity extends AppCompatActivity {
     private void setupPreviewMap() {
         binding.mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
             Point point = Point.fromLngLat(reportLng, reportLat);
-            binding.mapView.getMapboxMap().setCamera(new CameraOptions.Builder()
-                    .center(point)
-                    .zoom(15.0)
-                    .build());
+            binding.mapView.getMapboxMap().setCamera(new CameraOptions.Builder().center(point).zoom(15.0).build());
 
             addMarkerToMap(point);
         });
@@ -71,28 +84,28 @@ public class SendReportActivity extends AppCompatActivity {
         AnnotationPlugin annotationApi = AnnotationPluginImplKt.getAnnotations(binding.mapView);
         PointAnnotationManager pointAnnotationManager = PointAnnotationManagerKt.createPointAnnotationManager(annotationApi, new AnnotationConfig());
 
-        PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions()
-                .withPoint(point)
-                .withIconImage(android.graphics.BitmapFactory.decodeResource(getResources(), R.drawable.ic_location_preview_pin));
+        PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions().withPoint(point).withIconImage(android.graphics.BitmapFactory.decodeResource(getResources(), R.drawable.ic_location_preview_pin));
 
         pointAnnotationManager.create(pointAnnotationOptions);
     }
 
     private void setupCategoryRecyclerView() {
         binding.rvCategories.setLayoutManager(new GridLayoutManager(this, 3));
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(new Category("Fire", R.drawable.ic_emergency_fire));
-        categoryList.add(new Category("Accident", R.drawable.ic_emergency_car_accident));
-        categoryList.add(new Category("Medical", R.drawable.ic_emergency_medical));
-        categoryList.add(new Category("Robbery", R.drawable.ic_emergency_robbery));
-        categoryList.add(new Category("Ragging", R.drawable.ic_emergency_campus_ragging));
-        categoryList.add(new Category("Safety", R.drawable.ic_emergency_child_safety));
-        categoryList.add(new Category("Power", R.drawable.ic_emergency_power_outage));
-        categoryList.add(new Category("Travel", R.drawable.ic_emergency_travel));
-        categoryList.add(new Category("Women", R.drawable.ic_emergency_women_safety));
-        categoryList.add(new Category("Other", R.drawable.ic_emergency_other));
-
-        CategoryAdapter adapter = new CategoryAdapter(categoryList);
+        adapter = new CategoryAdapter(categoryList);
         binding.rvCategories.setAdapter(adapter);
+
+        firebaseFirestore.collection("categories").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                categoryList.clear();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Category category = document.toObject(Category.class);
+                    categoryList.add(category);
+                }
+                adapter.notifyDataSetChanged();
+            } else {
+                Log.e("FIRESTORE_ERROR", "Error fetching categories", task.getException());
+                Toast.makeText(this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

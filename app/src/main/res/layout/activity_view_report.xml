@@ -56,7 +56,7 @@
                     android:id="@+id/ivCategoryIcon"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/ic_emergency_car_accident"
+                    android:src="@drawable/ic_placeholder"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
