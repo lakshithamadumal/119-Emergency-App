@@ -158,6 +158,7 @@
                 android:gravity="top"
                 android:hint="Tell Us What is happening..."
                 android:textColorHint="#9796A1"
+                android:textColor="@color/mainBlack"
                 android:padding="15dp"
                 android:inputType="textMultiLine"
                 app:layout_constraintTop_toBottomOf="@id/rgSeverity" />
@@ -184,6 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Upload Image / Video"
+                    android:textColor="@color/mainBlack"
                     android:textStyle="bold" />
             </LinearLayout>
 
