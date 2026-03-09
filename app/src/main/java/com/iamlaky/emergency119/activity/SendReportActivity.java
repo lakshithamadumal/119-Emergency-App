@@ -3,6 +3,7 @@ package com.iamlaky.emergency119.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -187,11 +188,30 @@ public class SendReportActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("reports").document(customId)
                 .set(report)
                 .addOnSuccessListener(aVoid -> {
+                    incrementUserReportCount();
+
                     Toast.makeText(this, "Report Submitted Successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, ReportSuccessActivity.class));
                     finish();
                 })
                 .addOnFailureListener(e -> handleFailure(e.getMessage()));
+    }
+
+    private void incrementUserReportCount() {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+
+        java.util.Map<String, Object> updateData = new java.util.HashMap<>();
+        updateData.put("totalReports", com.google.firebase.firestore.FieldValue.increment(1));
+
+        FirebaseFirestore.getInstance().collection("users").document(uid)
+                .set(updateData, com.google.firebase.firestore.SetOptions.merge())
+                .addOnSuccessListener(unused -> {
+                    Log.d("DB_SUCCESS", "User report count incremented");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("DB_ERROR", "Failed to increment count: " + e.getMessage());
+                });
     }
 
     private void handleFailure(String error) {
