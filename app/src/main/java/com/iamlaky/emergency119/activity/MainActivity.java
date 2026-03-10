@@ -21,7 +21,7 @@ import com.iamlaky.emergency119.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding; // Binding Object එක
+    private ActivityMainBinding binding;
     private FirebaseAuth firebaseAuth;
 
     @Override
