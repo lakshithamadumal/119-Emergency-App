@@ -2,7 +2,6 @@ package com.iamlaky.emergency119.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -22,7 +21,6 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.activity.LoginActivity;
-import com.iamlaky.emergency119.activity.NotificationActivity;
 import com.iamlaky.emergency119.activity.ResetPasswordActivity;
 import com.iamlaky.emergency119.databinding.FragmentSettingsBinding;
 
@@ -30,14 +28,15 @@ public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
 
-    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-        if (isGranted) {
-            Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
-            updateSwitches();
-        }
-    });
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+                updateSwitches();
+            });
 
     @Nullable
     @Override
@@ -67,6 +66,16 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        binding.swCall.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissionLauncher.launch(Manifest.permission.CALL_PHONE);
+                }
+            } else {
+                updateSwitches();
+            }
+        });
+
         binding.btnLogout.setOnClickListener(v -> showLogoutConfirmation());
 
         binding.resetPasswordBtn.setOnClickListener(v -> {
@@ -75,15 +84,20 @@ public class SettingsFragment extends Fragment {
     }
 
     private void updateSwitches() {
+        // Notification Switch
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             binding.swNotification.setChecked(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED);
         }
+
+        // GPS Switch
         binding.swGps.setChecked(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+
+        // --- Call Switch ---
+        binding.swCall.setChecked(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED);
     }
 
     private void showLogoutConfirmation() {
         View dialogView = getLayoutInflater().inflate(R.layout.layout_logout_dialog, null);
-
         AlertDialog dialog = new AlertDialog.Builder(requireContext()).setView(dialogView).create();
 
         if (dialog.getWindow() != null) {
@@ -91,7 +105,6 @@ public class SettingsFragment extends Fragment {
         }
 
         dialogView.findViewById(R.id.btnCancel).setOnClickListener(v -> dialog.dismiss());
-
         dialogView.findViewById(R.id.btnConfirmLogout).setOnClickListener(v -> {
             dialog.dismiss();
             performLogout();
@@ -103,11 +116,16 @@ public class SettingsFragment extends Fragment {
     private void performLogout() {
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(getActivity(), "Logged out successfully", Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         requireActivity().finish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateSwitches();
     }
 
     @Override
