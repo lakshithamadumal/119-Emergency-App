@@ -29,7 +29,11 @@ public class Report {
     private String status;
 
     @ServerTimestamp
-    private Date timestamp;
+    private Date timestamp; //Received
+
+    private Date assignedTimestamp;
+    private Date inProgressTimestamp;
+    private Date completedTimestamp;
 
     private List<String> imageUrls;
 }

@@ -1,5 +1,6 @@
 package com.iamlaky.emergency119.adapter;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.R;
+import com.iamlaky.emergency119.activity.ViewReportActivity;
 import com.iamlaky.emergency119.model.Report;
 
 import java.util.List;
@@ -62,7 +64,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         holder.tvLocation.setText(report.getAddress());
         holder.tvStatus.setText(report.getStatus());
 
-        // --- Category Table එකෙන් Image URL එක Fetch කිරීම ---
         if (report.getCategoryId() != null) {
             db.collection("categories").document(report.getCategoryId())
                     .get()
@@ -81,7 +82,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
                     });
         }
 
-        // --- Status Colors UI ---
         String status = report.getStatus() != null ? report.getStatus() : "Received";
         switch (status) {
             case "Received":
@@ -106,9 +106,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
                 break;
         }
 
-        holder.itemView.setOnClickListener(v ->
-                Toast.makeText(v.getContext(), "ID: " + report.getReportId(), Toast.LENGTH_SHORT).show()
-        );
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ViewReportActivity.class);
+            intent.putExtra("REPORT_ID", report.getReportId());
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override

@@ -182,7 +182,7 @@ public class SendReportActivity extends AppCompatActivity {
                 cat.getCategoryId(), cat.getName(),
                 reportLat, reportLng, reportAddress,
                 severity, binding.etDescription.getText().toString().trim(),
-                "Received", new Date(), uploadedImageUrls
+                "Received", new Date(),null,null,null, uploadedImageUrls
         );
 
         FirebaseFirestore.getInstance().collection("reports").document(customId)
@@ -190,7 +190,10 @@ public class SendReportActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     incrementUserReportCount();
 
-                    startActivity(new Intent(this, ReportSuccessActivity.class));
+                    Intent intent = new Intent(this, ReportSuccessActivity.class);
+                    intent.putExtra("REPORT_ID", customId);
+
+                    startActivity(intent);
                     finish();
                 })
                 .addOnFailureListener(e -> handleFailure(e.getMessage()));

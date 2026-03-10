@@ -19,27 +19,26 @@ public class ReportViewModel extends ViewModel {
     private final MutableLiveData<List<Report>> _myReports = new MutableLiveData<>();
     public LiveData<List<Report>> myReports = _myReports;
 
+    private final MutableLiveData<Report> _selectedReport = new MutableLiveData<>();
+    public LiveData<Report> selectedReport = _selectedReport;
+
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ListenerRegistration countListener;
     private ListenerRegistration myReportsListener;
+    private ListenerRegistration singleReportListener;
 
     public void fetchAllReportsCount() {
         if (countListener != null) return;
         countListener = db.collection("reports").addSnapshotListener((value, error) -> {
             if (error != null) return;
-            if (value != null) {
-                _allReportsCount.setValue(value.size());
-            }
+            if (value != null) _allReportsCount.setValue(value.size());
         });
     }
 
     public void fetchMyReports() {
         String uid = FirebaseAuth.getInstance().getUid();
         if (uid == null) return;
-
-        if (myReportsListener != null) {
-            myReportsListener.remove();
-        }
+        if (myReportsListener != null) myReportsListener.remove();
 
         myReportsListener = db.collection("reports")
                 .whereEqualTo("uid", uid)
@@ -49,8 +48,18 @@ public class ReportViewModel extends ViewModel {
                         Log.e("FIRESTORE", "Listen failed.", error);
                         return;
                     }
-                    if (value != null) {
-                        _myReports.setValue(value.toObjects(Report.class));
+                    if (value != null) _myReports.setValue(value.toObjects(Report.class));
+                });
+    }
+
+    public void listenToReport(String reportId) {
+        if (singleReportListener != null) singleReportListener.remove();
+
+        singleReportListener = db.collection("reports").document(reportId)
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) return;
+                    if (value != null && value.exists()) {
+                        _selectedReport.setValue(value.toObject(Report.class));
                     }
                 });
     }
@@ -60,5 +69,6 @@ public class ReportViewModel extends ViewModel {
         super.onCleared();
         if (countListener != null) countListener.remove();
         if (myReportsListener != null) myReportsListener.remove();
+        if (singleReportListener != null) singleReportListener.remove();
     }
 }
