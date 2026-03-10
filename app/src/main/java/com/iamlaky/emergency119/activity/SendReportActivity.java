@@ -182,7 +182,7 @@ public class SendReportActivity extends AppCompatActivity {
                 cat.getCategoryId(), cat.getName(),
                 reportLat, reportLng, reportAddress,
                 severity, binding.etDescription.getText().toString().trim(),
-                "Pending", new Date(), uploadedImageUrls
+                "Received", new Date(), uploadedImageUrls
         );
 
         FirebaseFirestore.getInstance().collection("reports").document(customId)

@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.model.Report;
 import java.util.List;
@@ -31,56 +33,46 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     public void onBindViewHolder(@NonNull ReportViewHolder holder, int position) {
         Report report = reportList.get(position);
 
-//        holder.tvTitle.setText(report.getTitle());
-//        holder.tvLocation.setText(report.getLocation());
-//        holder.tvStatus.setText(report.getStatus());
-//
-//        switch (report.getStatus()) {
-//            case "Received":
-//                holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
-//                holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));                break;
-//            case "Assigned":
-//            case "In Progress":
-//                holder.tvStatus.setBackgroundResource(R.drawable.report_status_yellow);
-//                holder.tvStatus.setTextColor(Color.parseColor("#ffb400"));
-//                break;
-//            case "Completed":
-//                holder.tvStatus.setBackgroundResource(R.drawable.report_status_green);
-//                holder.tvStatus.setTextColor(Color.parseColor("#56ca00"));
-//                break;
-//            default:
-//                holder.tvStatus.setBackgroundColor(Color.LTGRAY);
-//                holder.tvStatus.setTextColor(Color.BLACK);
-//                break;
-//        }
+        holder.tvTitle.setText(report.getCategoryName());
+        holder.tvLocation.setText(report.getAddress());
+        holder.tvStatus.setText(report.getStatus());
 
-//        int iconRes;
-//        switch (report.getCategory()) {
-//            case "Car Accident":
-//                iconRes = R.drawable.ic_emergency_car_accident;
-//                break;
-//            case "Fire":
-//                iconRes = R.drawable.ic_emergency_fire;
-//                break;
-//            case "Medical Emergency":
-//                iconRes = R.drawable.ic_emergency_medical;
-//                break;
-//            case "Women Safety":
-//                iconRes = R.drawable.ic_emergency_women_safety;
-//                break;
-//            case "Power Outage":
-//                iconRes = R.drawable.ic_emergency_power_outage;
-//                break;
-//            default:
-//                iconRes = R.drawable.ic_emergency_other;
-//                break;
-//        }
-//        holder.ivIcon.setImageResource(iconRes);
+        String status = report.getStatus() != null ? report.getStatus() : "Received";
+        switch (status) {
+            case "Received":
+                holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
+                holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));
+                break;
+
+            case "Assigned":
+                holder.tvStatus.setBackgroundResource(R.drawable.report_status_orange);
+                holder.tvStatus.setTextColor(Color.parseColor("#FF9800"));
+                break;
+
+            case "In Progress":
+                holder.tvStatus.setBackgroundResource(R.drawable.report_status_yellow);
+                holder.tvStatus.setTextColor(Color.parseColor("#FFB400"));
+                break;
+
+            case "Completed":
+                holder.tvStatus.setBackgroundResource(R.drawable.report_status_green);
+                holder.tvStatus.setTextColor(Color.parseColor("#56CA00"));
+                break;
+
+            default:
+                holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
+                holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));
+                break;
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            Toast.makeText(v.getContext(), "Report ID: " + report.getReportId(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
     public int getItemCount() {
-        return reportList.size();
+        return reportList != null ? reportList.size() : 0;
     }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder {
