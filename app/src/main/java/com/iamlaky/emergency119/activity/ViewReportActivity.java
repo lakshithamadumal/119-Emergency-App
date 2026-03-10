@@ -45,13 +45,11 @@ public class ViewReportActivity extends AppCompatActivity {
     }
 
     private void updateUI(Report report) {
-        // මූලික විස්තර
         binding.tvReportTitleDetail.setText(report.getCategoryName());
         binding.tvLocationDetail.setText(report.getAddress());
         binding.tvReferenceId.setText("Reference ID: " + report.getReportId());
         binding.tvStatusBadgeDetail.setText(report.getStatus());
 
-        // --- Category Icon එක පෙන්වීම (CategoryId එකෙන් Table එක බලලා) ---
         if (report.getCategoryId() != null) {
             com.google.firebase.firestore.FirebaseFirestore.getInstance()
                     .collection("categories")
@@ -63,40 +61,34 @@ public class ViewReportActivity extends AppCompatActivity {
                             if (imgUrl != null && !imgUrl.isEmpty()) {
                                 com.bumptech.glide.Glide.with(this)
                                         .load(imgUrl)
-                                        .placeholder(R.drawable.ic_placeholder) // load වෙනකන් පේන එක
-                                        .error(R.drawable.ic_placeholder) // error එකක් ආවොත් පේන එක
+                                        .placeholder(R.drawable.ic_placeholder)
+                                        .error(R.drawable.ic_placeholder)
                                         .into(binding.ivCategoryIcon);
                             }
                         }
                     });
         }
 
-        // Report එක දාපු මුල්ම වෙලාව (Received Time)
         String receivedTime = report.getTimestamp() != null ? timeFormat.format(report.getTimestamp()) : "--:--";
         if (report.getTimestamp() != null) {
             binding.tvDateTimeDetail.setText("Today, " + receivedTime);
         }
 
-        // --- Timeline Logic (පරණ විදිහටම) ---
         String currentStatus = report.getStatus() != null ? report.getStatus() : "Received";
 
-        // 1. Received (සෑම විටම Active)
         updateStepUI(binding.stepReceived.getRoot(), "Received", receivedTime,
                 "Emergency request received by the system.", true, R.drawable.timeline_dot_blue, true);
 
-        // 2. Assigned
         boolean isAssigned = isStatusActive(currentStatus, "Assigned");
         updateStepUI(binding.stepAssigned.getRoot(), "Assigned",
                 (isAssigned && report.getAssignedTimestamp() != null) ? timeFormat.format(report.getAssignedTimestamp()) : "--:--",
                 "An officer has been assigned to your location.", true, R.drawable.timeline_dot_yellow, isAssigned);
 
-        // 3. In Progress
         boolean isInProgress = isStatusActive(currentStatus, "In Progress");
         updateStepUI(binding.stepInProgress.getRoot(), "In Progress",
                 (isInProgress && report.getInProgressTimestamp() != null) ? timeFormat.format(report.getInProgressTimestamp()) : "--:--",
                 "Help is on the way to your location.", true, R.drawable.timeline_dot_yellow, isInProgress);
 
-        // 4. Completed
         boolean isCompleted = isStatusActive(currentStatus, "Completed");
         updateStepUI(binding.stepCompleted.getRoot(), "Completed",
                 (isCompleted && report.getCompletedTimestamp() != null) ? timeFormat.format(report.getCompletedTimestamp()) : "--:--",
