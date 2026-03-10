@@ -3,16 +3,18 @@ package com.iamlaky.emergency119.activity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.iamlaky.emergency119.R;
-import com.iamlaky.emergency119.databinding.ActivityMainBinding; // Binding class එක
+import com.iamlaky.emergency119.databinding.ActivityMainBinding;
 import com.iamlaky.emergency119.fragment.HomeFragment;
 import com.iamlaky.emergency119.fragment.ProfileFragment;
 import com.iamlaky.emergency119.fragment.ReportsFragment;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private FirebaseAuth firebaseAuth;
+    private final String EMERGENCY_NUMBER = "0718231231";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +60,44 @@ public class MainActivity extends AppCompatActivity {
         binding.flSettings.setOnClickListener(v -> loadFragment(new SettingsFragment(), 3));
 
         binding.btnCall.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(intent);
+            makePhoneCall(EMERGENCY_NUMBER);
         });
 
         handleIntentNavigation(getIntent());
+    }
+
+    private void makePhoneCall(String number) {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.CALL_PHONE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+
+            androidx.core.app.ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.CALL_PHONE}, 101);
+        } else {
+            performCall(number);
+        }
+    }
+
+    private void performCall(String number) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + number));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 101) {
+            if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                performCall(EMERGENCY_NUMBER);
+            } else {
+                Toast.makeText(this, "Permission Denied! Cannot make the call.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
