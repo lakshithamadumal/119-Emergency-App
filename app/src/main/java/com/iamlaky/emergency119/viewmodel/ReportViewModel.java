@@ -1,15 +1,14 @@
 package com.iamlaky.emergency119.viewmodel;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.iamlaky.emergency119.model.Report;
-
 import java.util.List;
 
 public class ReportViewModel extends ViewModel {
@@ -26,7 +25,6 @@ public class ReportViewModel extends ViewModel {
 
     public void fetchAllReportsCount() {
         if (countListener != null) return;
-
         countListener = db.collection("reports").addSnapshotListener((value, error) -> {
             if (error != null) return;
             if (value != null) {
@@ -37,13 +35,20 @@ public class ReportViewModel extends ViewModel {
 
     public void fetchMyReports() {
         String uid = FirebaseAuth.getInstance().getUid();
-        if (uid == null || myReportsListener != null) return;
+        if (uid == null) return;
+
+        if (myReportsListener != null) {
+            myReportsListener.remove();
+        }
 
         myReportsListener = db.collection("reports")
                 .whereEqualTo("uid", uid)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
-                    if (error != null) return;
+                    if (error != null) {
+                        Log.e("FIRESTORE", "Listen failed.", error);
+                        return;
+                    }
                     if (value != null) {
                         _myReports.setValue(value.toObjects(Report.class));
                     }

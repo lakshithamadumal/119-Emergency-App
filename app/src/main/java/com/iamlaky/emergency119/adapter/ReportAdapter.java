@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.model.Report;
 import java.util.List;
@@ -20,6 +19,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
     public ReportAdapter(List<Report> reportList) {
         this.reportList = reportList;
+    }
+
+    public void updateList(List<Report> newList) {
+        this.reportList = newList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -43,22 +47,18 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
                 holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));
                 break;
-
             case "Assigned":
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_orange);
                 holder.tvStatus.setTextColor(Color.parseColor("#FF9800"));
                 break;
-
             case "In Progress":
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_yellow);
                 holder.tvStatus.setTextColor(Color.parseColor("#FFB400"));
                 break;
-
             case "Completed":
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_green);
                 holder.tvStatus.setTextColor(Color.parseColor("#56CA00"));
                 break;
-
             default:
                 holder.tvStatus.setBackgroundResource(R.drawable.report_status_blue);
                 holder.tvStatus.setTextColor(Color.parseColor("#16B1FF"));
@@ -66,19 +66,16 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         }
 
         holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Report ID: " + report.getReportId(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), "ID: " + report.getReportId(), Toast.LENGTH_SHORT).show();
         });
     }
 
     @Override
-    public int getItemCount() {
-        return reportList != null ? reportList.size() : 0;
-    }
+    public int getItemCount() { return reportList != null ? reportList.size() : 0; }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder {
         ImageView ivIcon;
         TextView tvTitle, tvLocation, tvStatus;
-
         public ReportViewHolder(@NonNull View itemView) {
             super(itemView);
             ivIcon = itemView.findViewById(R.id.ivReportIcon);
