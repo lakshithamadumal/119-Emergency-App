@@ -2,10 +2,16 @@ package com.iamlaky.emergency119.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.databinding.ActivityViewReportBinding;
 import com.iamlaky.emergency119.model.Report;
@@ -77,7 +83,16 @@ public class ViewReportActivity extends AppCompatActivity {
                         }
                     });
         }
-
+///  Delete Report
+        if ("Received".equals(report.getStatus())) {
+            binding.btnCancel.setEnabled(true);
+            binding.btnCancel.setAlpha(1.0f);
+            binding.btnCancel.setOnClickListener(v -> showCancelDialog(report.getReportId()));
+        } else {
+            binding.btnCancel.setEnabled(false);
+            binding.btnCancel.setAlpha(0.3f);
+        }
+///
         String receivedTime = report.getTimestamp() != null ? timeFormat.format(report.getTimestamp()) : "--:--";
         if (report.getTimestamp() != null) {
             binding.tvDateTimeDetail.setText("Today, " + receivedTime);
@@ -128,5 +143,57 @@ public class ViewReportActivity extends AppCompatActivity {
             stepView.setAlpha(0.3f);
             dot.setBackgroundResource(R.drawable.timeline_dot_yellow);
         }
+    }
+
+    private void showCancelDialog(String reportId) {
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        dialog.setContentView(R.layout.dialog_cancel_report);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        dialog.findViewById(R.id.btnNo).setOnClickListener(v -> dialog.dismiss());
+
+        dialog.findViewById(R.id.btnConfirmCancel).setOnClickListener(v -> {
+            dialog.dismiss();
+            deleteReportFromFirestore(reportId);
+        });
+
+        dialog.show();
+    }
+
+    private void deleteReportFromFirestore(String reportId) {
+        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                .collection("reports")
+                .document(reportId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Report Deleted Successfully", Toast.LENGTH_SHORT).show();
+                    decrementUserReportCount();
+
+                    Intent intent = new Intent(ViewReportActivity.this, MainActivity.class);
+                    intent.putExtra("TARGET_FRAGMENT", "REPORTS");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error deleting report: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void decrementUserReportCount() {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+
+        java.util.Map<String, Object> updateData = new java.util.HashMap<>();
+        updateData.put("totalReports", com.google.firebase.firestore.FieldValue.increment(-1));
+
+        FirebaseFirestore.getInstance().collection("users").document(uid)
+                .set(updateData, com.google.firebase.firestore.SetOptions.merge())
+                .addOnSuccessListener(unused -> {
+                    Log.d("DB_SUCCESS", "User report count decremented");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("DB_ERROR", "Failed to decrement count: " + e.getMessage());
+                });
     }
 }
