@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,6 +26,7 @@ public class ViewReportActivity extends AppCompatActivity {
     private ActivityViewReportBinding binding;
     private ReportViewModel viewModel;
     private SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+    private String operatorNumber = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,16 @@ public class ViewReportActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
 
+        });
+
+        fetchOperatorNumber();
+
+        binding.btnCallOperator.setOnClickListener(v -> {
+            if (!operatorNumber.isEmpty()) {
+                makePhoneCall(operatorNumber);
+            } else {
+                Toast.makeText(this, "Operator number not found!", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -236,6 +248,54 @@ public class ViewReportActivity extends AppCompatActivity {
                 binding.tvStatusBadgeDetail.setTextColor(Color.parseColor("#56CA00"));
                 binding.tvStatusBadgeDetail.setBackgroundResource(R.drawable.report_status_green);
                 break;
+        }
+    }
+
+    private void fetchOperatorNumber() {
+        FirebaseFirestore.getInstance()
+                .collection("operators")
+                .document("1")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Object val = documentSnapshot.get("number");
+                        operatorNumber = String.valueOf(val);
+                    }
+                });
+    }
+
+    private void makePhoneCall(String number) {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.CALL_PHONE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+
+            androidx.core.app.ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.CALL_PHONE}, 102);
+        } else {
+            performCall(number);
+        }
+    }
+
+    private void performCall(String number) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(android.net.Uri.parse("tel:" + number));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 102) {
+            if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                if (!operatorNumber.isEmpty()) {
+                    performCall(operatorNumber);
+                }
+            } else {
+                Toast.makeText(this, "Permission Denied! Cannot call operator.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
