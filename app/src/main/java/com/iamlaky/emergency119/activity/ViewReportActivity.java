@@ -1,6 +1,7 @@
 package com.iamlaky.emergency119.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -73,6 +74,8 @@ public class ViewReportActivity extends AppCompatActivity {
         binding.tvLocationDetail.setText(report.getAddress());
         binding.tvReferenceId.setText("Reference ID: " + report.getReportId());
         binding.tvStatusBadgeDetail.setText(report.getStatus());
+
+        updateStatusBadge(report.getStatus());
 
         if (report.getCategoryId() != null) {
             com.google.firebase.firestore.FirebaseFirestore.getInstance()
@@ -204,5 +207,35 @@ public class ViewReportActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.e("DB_ERROR", "Failed to decrement count: " + e.getMessage());
                 });
+    }
+
+    private void updateStatusBadge(String status) {
+        if (status == null) return;
+
+        switch (status) {
+            case "Received":
+                binding.tvStatusBadgeDetail.setText("Received");
+                binding.tvStatusBadgeDetail.setTextColor(Color.parseColor("#16B1FF"));
+                binding.tvStatusBadgeDetail.setBackgroundResource(R.drawable.report_status_blue);
+                break;
+
+            case "Assigned":
+                binding.tvStatusBadgeDetail.setText(status);
+                binding.tvStatusBadgeDetail.setTextColor(Color.parseColor("#FF9800"));
+                binding.tvStatusBadgeDetail.setBackgroundResource(R.drawable.report_status_orange);
+                break;
+
+            case "In Progress":
+                binding.tvStatusBadgeDetail.setText(status);
+                binding.tvStatusBadgeDetail.setTextColor(Color.parseColor("#FFB400"));
+                binding.tvStatusBadgeDetail.setBackgroundResource(R.drawable.report_status_yellow);
+                break;
+
+            case "Completed":
+                binding.tvStatusBadgeDetail.setText("Completed");
+                binding.tvStatusBadgeDetail.setTextColor(Color.parseColor("#56CA00"));
+                binding.tvStatusBadgeDetail.setBackgroundResource(R.drawable.report_status_green);
+                break;
+        }
     }
 }
