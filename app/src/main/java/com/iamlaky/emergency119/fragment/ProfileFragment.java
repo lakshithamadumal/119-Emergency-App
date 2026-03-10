@@ -124,14 +124,54 @@ public class ProfileFragment extends Fragment {
         String uid = firebaseAuth.getUid();
         if (uid == null) return;
 
+        EditText etFullName = binding.inputFullName.etInputValue;
+        EditText etPhone = binding.inputPhone.etInputValue;
+        EditText etAddress = binding.inputAddress.etInputValue;
+        EditText etNic = binding.inputNIC.etInputValue;
+
+        String name = etFullName.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        String address = etAddress.getText().toString().trim();
+        String nic = etNic.getText().toString().trim();
+
+        if (name.isEmpty()) {
+            etFullName.setError("Full name is required");
+            etFullName.requestFocus();
+            return;
+        }
+
+        if (phone.isEmpty()) {
+            etPhone.setError("Phone number is required");
+            etPhone.requestFocus();
+            return;
+        } else if (!phone.matches("^[0-9]{10}$")) {
+            etPhone.setError("Enter a valid 10-digit phone number");
+            etPhone.requestFocus();
+            return;
+        }
+
+        String nicPattern = "^(([0-9]{9}[vVxX])|([0-9]{12}))$";
+        String passportPattern = "^[a-zA-Z][0-9]{7,9}$";
+
+        if (nic.isEmpty()) {
+            etNic.setError("NIC or Passport number is required");
+            etNic.requestFocus();
+            return;
+        } else if (!nic.matches(nicPattern) && !nic.matches(passportPattern)) {
+            etNic.setError("Enter a valid NIC (e.g. 123456789V) or Passport");
+            etNic.requestFocus();
+            return;
+        }
+
+
         binding.btnUpdate.setEnabled(false);
         binding.btnUpdate.setText("Updating...");
 
         Map<String, Object> updates = new HashMap<>();
-        updates.put("name", binding.inputFullName.etInputValue.getText().toString().trim());
-        updates.put("phoneNumber", binding.inputPhone.etInputValue.getText().toString().trim());
-        updates.put("address", binding.inputAddress.etInputValue.getText().toString().trim());
-        updates.put("nicNumber", binding.inputNIC.etInputValue.getText().toString().trim());
+        updates.put("name", name);
+        updates.put("phoneNumber", phone);
+        updates.put("address", address);
+        updates.put("nicNumber", nic);
         updates.put("emergencyNick1", binding.etNick1.getText().toString().trim());
         updates.put("emergencyContact1", binding.etEmergencyNum1.getText().toString().trim());
         updates.put("emergencyNick2", binding.etNick2.getText().toString().trim());
@@ -140,9 +180,7 @@ public class ProfileFragment extends Fragment {
         FirebaseFirestore.getInstance().collection("users").document(uid).update(updates).addOnSuccessListener(unused -> {
             binding.btnUpdate.setEnabled(true);
             binding.btnUpdate.setText("UPDATE");
-
             clearFormFocus();
-
             Toast.makeText(getContext(), "Profile updated!", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
             binding.btnUpdate.setEnabled(true);
@@ -195,7 +233,7 @@ public class ProfileFragment extends Fragment {
                         String responseData = response.body().string();
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
-                            /// Get Direct Link
+
                             String imageUrl = jsonObject.getJSONObject("data").getString("url");
 
                             saveImageUrlToFirestore(imageUrl);
