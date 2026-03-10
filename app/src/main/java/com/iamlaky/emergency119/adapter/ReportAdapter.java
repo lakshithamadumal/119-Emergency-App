@@ -7,23 +7,44 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.model.Report;
+
 import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
     private List<Report> reportList;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public ReportAdapter(List<Report> reportList) {
         this.reportList = reportList;
     }
 
     public void updateList(List<Report> newList) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return reportList.size(); }
+            @Override
+            public int getNewListSize() { return newList.size(); }
+            @Override
+            public boolean areItemsTheSame(int oldP, int newP) {
+                return reportList.get(oldP).getReportId().equals(newList.get(newP).getReportId());
+            }
+            @Override
+            public boolean areContentsTheSame(int oldP, int newP) {
+                return reportList.get(oldP).equals(newList.get(newP));
+            }
+        });
         this.reportList = newList;
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -41,6 +62,26 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         holder.tvLocation.setText(report.getAddress());
         holder.tvStatus.setText(report.getStatus());
 
+        // --- Category Table එකෙන් Image URL එක Fetch කිරීම ---
+        if (report.getCategoryId() != null) {
+            db.collection("categories").document(report.getCategoryId())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String imgUrl = documentSnapshot.getString("imageUrl");
+                            if (imgUrl != null && !imgUrl.isEmpty()) {
+                                Glide.with(holder.itemView.getContext())
+                                        .load(imgUrl)
+                                        .placeholder(R.drawable.report)
+                                        .error(R.drawable.report)
+                                        .circleCrop() // රවුමට පෙන්වන්න
+                                        .into(holder.ivIcon);
+                            }
+                        }
+                    });
+        }
+
+        // --- Status Colors UI ---
         String status = report.getStatus() != null ? report.getStatus() : "Received";
         switch (status) {
             case "Received":
@@ -65,9 +106,9 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
                 break;
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "ID: " + report.getReportId(), Toast.LENGTH_SHORT).show();
-        });
+        holder.itemView.setOnClickListener(v ->
+                Toast.makeText(v.getContext(), "ID: " + report.getReportId(), Toast.LENGTH_SHORT).show()
+        );
     }
 
     @Override
@@ -76,6 +117,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     public static class ReportViewHolder extends RecyclerView.ViewHolder {
         ImageView ivIcon;
         TextView tvTitle, tvLocation, tvStatus;
+
         public ReportViewHolder(@NonNull View itemView) {
             super(itemView);
             ivIcon = itemView.findViewById(R.id.ivReportIcon);
