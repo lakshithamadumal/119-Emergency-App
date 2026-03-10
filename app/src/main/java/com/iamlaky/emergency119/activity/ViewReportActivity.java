@@ -55,6 +55,15 @@ public class ViewReportActivity extends AppCompatActivity {
         viewModel.selectedReport.observe(this, report -> {
             if (report != null) {
                 updateUI(report);
+            } else {
+                Toast.makeText(this, "Report no longer exists", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(ViewReportActivity.this, MainActivity.class);
+                intent.putExtra("TARGET_FRAGMENT", "REPORTS");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+
+                finish();
             }
         });
     }
