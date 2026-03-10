@@ -1,5 +1,6 @@
 package com.iamlaky.emergency119.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -33,7 +34,24 @@ public class ViewReportActivity extends AppCompatActivity {
             observeReport();
         }
 
-        binding.btnBack.setOnClickListener(v -> finish());
+        binding.btnBack.setOnClickListener(v -> {
+            // MainActivity එකට Intent එකක් හදනවා
+            Intent intent = new Intent(ViewReportActivity.this, MainActivity.class);
+
+            // MainActivity එකේ "handleIntentNavigation" එකට අහුවෙන්න මේ Extra එක දානවා
+            intent.putExtra("TARGET_FRAGMENT", "REPORTS");
+
+            // පරණ Activities clear කරලා MainActivity එක තිබුණ තැනින් උඩට ගන්නවා
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            startActivity(intent);
+
+            // දැනට ඉන්න ViewReportActivity එක වහලා දානවා
+            finish();
+
+            // ලස්සනට පරණ තැනට යන Animation එකක් දාමු
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        });
     }
 
     private void observeReport() {
