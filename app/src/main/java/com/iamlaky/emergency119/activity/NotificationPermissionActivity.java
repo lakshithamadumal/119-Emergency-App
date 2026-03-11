@@ -2,6 +2,7 @@ package com.iamlaky.emergency119.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -44,6 +45,9 @@ public class NotificationPermissionActivity extends AppCompatActivity {
     }
 
     private void goToNotifications() {
+        SharedPreferences pref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        pref.edit().putBoolean("notif_skipped", true).apply();
+
         startActivity(new Intent(this, NotificationActivity.class));
         finish();
     }

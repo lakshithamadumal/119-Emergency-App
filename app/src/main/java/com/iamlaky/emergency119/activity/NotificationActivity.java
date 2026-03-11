@@ -2,6 +2,7 @@ package com.iamlaky.emergency119.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,9 +28,12 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SharedPreferences pref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        boolean isSkipped = pref.getBoolean("notif_skipped", false);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
+                    != PackageManager.PERMISSION_GRANTED && !isSkipped) {
 
                 Intent intent = new Intent(this, NotificationPermissionActivity.class);
                 startActivity(intent);
