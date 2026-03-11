@@ -2,7 +2,12 @@ package com.iamlaky.emergency119.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -13,12 +18,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.databinding.ActivityMainBinding;
 import com.iamlaky.emergency119.fragment.HomeFragment;
 import com.iamlaky.emergency119.fragment.ProfileFragment;
 import com.iamlaky.emergency119.fragment.ReportsFragment;
 import com.iamlaky.emergency119.fragment.SettingsFragment;
+import com.iamlaky.emergency119.model.EmergencyReport;
 import com.iamlaky.emergency119.viewmodel.UserViewModel;
 
 public class MainActivity extends BaseActivity {
@@ -26,6 +33,14 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private FirebaseAuth firebaseAuth;
     private final String EMERGENCY_NUMBER = "0718231231";
+
+    /// Shake
+    private SensorManager sensorManager;
+    private float acceleration = 0f;
+    private float currentAcceleration = 0f;
+    private float lastAcceleration = 0f;
+
+    /// Shake
 
     @Override
     protected boolean shouldCheckInternet() {
@@ -74,14 +89,19 @@ public class MainActivity extends BaseActivity {
         });
 
         handleIntentNavigation(getIntent());
+
+        /// Shake Initialize
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        currentAcceleration = SensorManager.GRAVITY_EARTH;
+        lastAcceleration = SensorManager.GRAVITY_EARTH;
+        acceleration = 0.00f;
+        /// Shake Initialize
     }
 
     private void makePhoneCall(String number) {
-        if (androidx.core.content.ContextCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.CALL_PHONE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CALL_PHONE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
 
-            androidx.core.app.ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{android.Manifest.permission.CALL_PHONE}, 101);
+            androidx.core.app.ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CALL_PHONE}, 101);
         } else {
             performCall(number);
         }
@@ -143,10 +163,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void loadFragment(Fragment fragment, int index) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
         updateNavUI(index);
     }
@@ -179,5 +196,56 @@ public class MainActivity extends BaseActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    private final SensorEventListener sensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            lastAcceleration = currentAcceleration;
+            currentAcceleration = (float) Math.sqrt((double) (x * x + y * y + z * z));
+            float delta = currentAcceleration - lastAcceleration;
+            acceleration = acceleration * 0.9f + delta;
+
+            if (acceleration > 12) {
+                sendEmergencyReport();
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(sensorListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(sensorListener);
+    }
+
+    private void sendEmergencyReport() {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String reportId = db.collection("emergency_reports").document().getId();
+
+        long timestamp = System.currentTimeMillis();
+
+        EmergencyReport report = new EmergencyReport(reportId, currentUserId, timestamp);
+
+        db.collection("emergency_reports").document(reportId).set(report).addOnSuccessListener(aVoid -> {
+            Toast.makeText(this, "SOS Sent!", Toast.LENGTH_LONG).show();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
     }
 }
