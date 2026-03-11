@@ -59,7 +59,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SendReportActivity extends AppCompatActivity {
+public class SendReportActivity extends BaseActivity {
 
     private ActivitySendReportBinding binding;
     private CategoryViewModel categoryViewModel;

@@ -148,10 +148,18 @@ public class MainActivity extends AppCompatActivity {
         binding.flSettings.setBackgroundResource(R.drawable.nav_icon_bg);
 
         switch (selectedIndex) {
-            case 0: binding.flHome.setBackgroundResource(R.drawable.home_icon_bg); break;
-            case 1: binding.flDoc.setBackgroundResource(R.drawable.home_icon_bg); break;
-            case 2: binding.flProfile.setBackgroundResource(R.drawable.home_icon_bg); break;
-            case 3: binding.flSettings.setBackgroundResource(R.drawable.home_icon_bg); break;
+            case 0:
+                binding.flHome.setBackgroundResource(R.drawable.home_icon_bg);
+                break;
+            case 1:
+                binding.flDoc.setBackgroundResource(R.drawable.home_icon_bg);
+                break;
+            case 2:
+                binding.flProfile.setBackgroundResource(R.drawable.home_icon_bg);
+                break;
+            case 3:
+                binding.flSettings.setBackgroundResource(R.drawable.home_icon_bg);
+                break;
         }
     }
 

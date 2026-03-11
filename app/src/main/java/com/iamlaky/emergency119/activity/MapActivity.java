@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends BaseActivity {
 
     private ActivityMapBinding binding;
     private Point currentPoint;

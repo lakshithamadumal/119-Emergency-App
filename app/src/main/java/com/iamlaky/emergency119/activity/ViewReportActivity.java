@@ -21,7 +21,7 @@ import com.iamlaky.emergency119.viewmodel.ReportViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class ViewReportActivity extends AppCompatActivity {
+public class ViewReportActivity extends BaseActivity {
 
     private ActivityViewReportBinding binding;
     private ReportViewModel viewModel;
