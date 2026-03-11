@@ -45,6 +45,8 @@ public class MainActivity extends BaseActivity {
     private float currentAcceleration = 0f;
     private float lastAcceleration = 0f;
 
+    private boolean isSOSProcessing = false;
+    private long lastShakeTime = 0;
     /// Shake
 
     @Override
@@ -216,7 +218,15 @@ public class MainActivity extends BaseActivity {
             acceleration = acceleration * 0.9f + delta;
 
             if (acceleration > 12) {
-                sendEmergencyReport();
+                long currentTime = System.currentTimeMillis();
+
+                if (!isSOSProcessing && (currentTime - lastShakeTime > 10000)) {
+
+                    isSOSProcessing = true;
+                    lastShakeTime = currentTime;
+
+                    sendEmergencyReport();
+                }
             }
         }
 
@@ -247,11 +257,17 @@ public class MainActivity extends BaseActivity {
 
         EmergencyReport report = new EmergencyReport(reportId, currentUserId, timestamp);
 
-        db.collection("emergency_reports").document(reportId).set(report).addOnSuccessListener(aVoid -> {
-            showSOSSuccessDialog(reportId);
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
+        db.collection("emergency_reports")
+                .document(reportId)
+                .set(report)
+                .addOnSuccessListener(aVoid -> {
+                    showSOSSuccessDialog(reportId);
+                    isSOSProcessing = false;
+                })
+                .addOnFailureListener(e -> {
+                    isSOSProcessing = false;
+                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void showSOSSuccessDialog(String reportId) {
