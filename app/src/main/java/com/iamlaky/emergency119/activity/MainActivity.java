@@ -21,11 +21,21 @@ import com.iamlaky.emergency119.fragment.ReportsFragment;
 import com.iamlaky.emergency119.fragment.SettingsFragment;
 import com.iamlaky.emergency119.viewmodel.UserViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private FirebaseAuth firebaseAuth;
     private final String EMERGENCY_NUMBER = "0718231231";
+
+    @Override
+    protected boolean shouldCheckInternet() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldCheckBattery() {
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

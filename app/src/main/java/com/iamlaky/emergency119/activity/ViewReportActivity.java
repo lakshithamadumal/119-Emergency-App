@@ -29,6 +29,16 @@ public class ViewReportActivity extends BaseActivity {
     private String operatorNumber = "";
 
     @Override
+    protected boolean shouldCheckInternet() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldCheckBattery() {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityViewReportBinding.inflate(getLayoutInflater());

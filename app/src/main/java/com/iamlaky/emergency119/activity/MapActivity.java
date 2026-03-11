@@ -46,6 +46,15 @@ public class MapActivity extends BaseActivity {
     private Point currentPoint;
     private static final int REQUEST_CHECK_SETTINGS = 1001;
 
+    @Override
+    protected boolean shouldCheckInternet() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldCheckBattery() {
+        return true;
+    }
     private final ActivityResultLauncher<String[]> locationPermissionRequest =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 Boolean fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);

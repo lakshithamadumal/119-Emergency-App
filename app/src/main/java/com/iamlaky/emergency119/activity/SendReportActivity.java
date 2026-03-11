@@ -75,6 +75,16 @@ public class SendReportActivity extends BaseActivity {
     private static final int PICK_IMAGES_REQUEST = 101;
 
     @Override
+    protected boolean shouldCheckInternet() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldCheckBattery() {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
