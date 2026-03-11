@@ -2,14 +2,19 @@ package com.iamlaky.emergency119.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -243,9 +248,21 @@ public class MainActivity extends BaseActivity {
         EmergencyReport report = new EmergencyReport(reportId, currentUserId, timestamp);
 
         db.collection("emergency_reports").document(reportId).set(report).addOnSuccessListener(aVoid -> {
-            Toast.makeText(this, "SOS Sent!", Toast.LENGTH_LONG).show();
+            showSOSSuccessDialog(reportId);
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void showSOSSuccessDialog(String reportId) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_sos_sent);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        dialog.show();
     }
 }
