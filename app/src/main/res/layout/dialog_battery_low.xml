@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/bg_button_blue"
+        android:background="@drawable/bg_button_red_battery"
         android:text="I Understand"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"

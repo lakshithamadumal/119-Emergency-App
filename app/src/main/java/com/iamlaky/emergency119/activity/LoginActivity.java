@@ -86,16 +86,13 @@ public class LoginActivity extends AppCompatActivity {
         binding.tvSignUpLink.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
 
 ///  Goto Forgot Password Activity
         binding.tvForgotPass.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-            startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        });
+            startActivity(intent);});
     }
 
     private void resetLoginButton() {

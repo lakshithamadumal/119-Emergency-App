@@ -119,7 +119,6 @@ public class SignUpActivity extends AppCompatActivity {
         binding.tvLoginLink.setOnClickListener(view -> {
             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
     }
