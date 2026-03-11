@@ -38,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         if (shouldCheckBattery()) {
-            IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_LOW);
+            IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
             registerReceiver(batteryReceiver, filter);
         }
     }

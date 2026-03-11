@@ -22,14 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._119">
 
-        <receiver
-            android:name=".utils.BatteryReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BATTERY_LOW" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".activity.BaseActivity"
             android:exported="false" />
