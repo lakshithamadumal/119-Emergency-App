@@ -11,9 +11,9 @@
     <LinearLayout
         android:layout_width="335dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="21dp"
             android:fontFamily="sans-serif-black"
-            android:text="@string/enable_notifications_text"
+            android:text="Stay Updated!"
             android:textColor="#292D32"
             android:textSize="22sp"
             android:letterSpacing="0.01" />
@@ -45,22 +45,35 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="@string/enavle_notification_small_text"
+            android:text="For a better experience, allow notifications to receive emergency alerts and real-time updates directly on your screen."
             android:textColor="#A0A0A0"
             android:textSize="17sp"
             android:lineSpacingExtra="4dp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_allow_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_white_rounded_card"
+            android:backgroundTint="#007AFF"
+            android:text="Allow Notifications"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_skip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="21dp"
+            android:layout_marginTop="16dp"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="sans-serif-medium"
             android:padding="10dp"
-            android:text="@string/allow_notifications_btn_text"
-            android:textColor="#007AFF"
+            android:text="Not now, maybe later"
+            android:textColor="#8A8A8A"
             android:textSize="15sp" />
 
     </LinearLayout>

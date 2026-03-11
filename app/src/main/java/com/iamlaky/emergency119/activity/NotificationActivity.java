@@ -1,12 +1,15 @@
 package com.iamlaky.emergency119.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.adapter.NotificationAdapter;
 import com.iamlaky.emergency119.databinding.ActivityNotificationBinding;
 import com.iamlaky.emergency119.model.NotificationModel;
@@ -23,6 +26,17 @@ public class NotificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                Intent intent = new Intent(this, NotificationPermissionActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+        }
 
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
