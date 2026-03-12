@@ -24,7 +24,7 @@ public class NotificationViewModel extends ViewModel {
     public void fetchNotifications() {
         db.collection("notifications")
                 .whereEqualTo("userId", currentUserId)
-//                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         Log.e("FIRESTORE_ERROR", error.getMessage());
