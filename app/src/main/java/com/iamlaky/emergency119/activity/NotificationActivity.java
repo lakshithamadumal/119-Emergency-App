@@ -6,14 +6,19 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.adapter.NotificationAdapter;
 import com.iamlaky.emergency119.databinding.ActivityNotificationBinding;
 import com.iamlaky.emergency119.model.Notification;
+import com.iamlaky.emergency119.viewmodel.NotificationViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,50 +27,37 @@ public class NotificationActivity extends AppCompatActivity {
 
     private ActivityNotificationBinding binding;
     private NotificationAdapter adapter;
-    private List<Notification> notificationList;
+    private NotificationViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SharedPreferences pref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        boolean isSkipped = pref.getBoolean("notif_skipped", false);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED && !isSkipped) {
-
-                Intent intent = new Intent(this, NotificationPermissionActivity.class);
-                startActivity(intent);
-                finish();
-                return;
-            }
-        }
-
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.btnBack.setOnClickListener(view -> {
-            finish();
-        });
+        viewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
 
         setupRecyclerView();
+        observeViewModel();
+
+        binding.btnBack.setOnClickListener(view -> finish());
     }
 
     private void setupRecyclerView() {
         binding.rvNotifications.setLayoutManager(new LinearLayoutManager(this));
-
-        notificationList = new ArrayList<>();
-
-        long currentTime = System.currentTimeMillis();
-
-        notificationList.add(new Notification("N1", "U001", "Use moni for payment at selected merchants and get 15% discount", "PROMO", currentTime));
-        notificationList.add(new Notification("N2", "U001", "Only for you, transfer to another bank free of charge", "PROMO", currentTime - 3600000));
-        notificationList.add(new Notification("N3", "U001", "Emergency alert: Heavy rain expected in your area.", "ALERT", currentTime - 7200000));
-        notificationList.add(new Notification("N4", "U001", "Update: Your profile information has been successfully updated.", "SYSTEM", currentTime - 86400000));
-
-        adapter = new NotificationAdapter(notificationList);
+        adapter = new NotificationAdapter(new ArrayList<>());
         binding.rvNotifications.setAdapter(adapter);
+    }
+
+    private void observeViewModel() {
+        viewModel.notifications.observe(this, notifications -> {
+            if (notifications != null) {
+                adapter = new NotificationAdapter(notifications);
+                binding.rvNotifications.setAdapter(adapter);
+            }
+        });
+
+        viewModel.fetchNotifications();
     }
 
     @Override

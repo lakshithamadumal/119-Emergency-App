@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -14,7 +14,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.iamlaky.emergency119.R;
 import com.iamlaky.emergency119.activity.NotificationActivity;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class MessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
