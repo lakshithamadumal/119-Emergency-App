@@ -30,17 +30,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String channelId = "emergency_alerts";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    "Emergency Alerts",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("Channel for Emergency SOS Notifications");
-            channel.enableLights(true);
-            channel.setLightColor(Color.RED);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel(
+                channelId,
+                "Emergency Alerts",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        channel.setDescription("Channel for Emergency SOS Notifications");
+        channel.enableLights(true);
+        channel.setLightColor(Color.RED);
+        notificationManager.createNotificationChannel(channel);
 
         Intent intent = new Intent(this, NotificationActivity.class);
 
@@ -53,7 +51,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        // 3. Notification එක Build කරනවා
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(ContextCompat.getColor(this, R.color.mainRed))
