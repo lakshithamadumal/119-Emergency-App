@@ -3,6 +3,7 @@ package com.iamlaky.emergency119.activity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -251,18 +254,18 @@ public class MainActivity extends BaseActivity {
 
     private void sendEmergencyReport() {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String reportId = db.collection("emergency_reports").document().getId();
-
         long timestamp = System.currentTimeMillis();
 
         EmergencyReport report = new EmergencyReport(reportId, currentUserId, timestamp);
 
-        db.collection("emergency_reports")
-                .document(reportId)
-                .set(report)
+        db.collection("emergency_reports").document(reportId).set(report)
                 .addOnSuccessListener(aVoid -> {
+
+                    addNotificationToHistory(currentUserId, "SOS Alert", "Your emergency report has been sent.");
+                    showLocalNotification("SOS Alert", "Your emergency report was sent successfully.");
+
                     showSOSSuccessDialog(reportId);
                     isSOSProcessing = false;
                 })
@@ -270,6 +273,41 @@ public class MainActivity extends BaseActivity {
                     isSOSProcessing = false;
                     Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void addNotificationToHistory(String userId, String title, String description) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String notificationId = db.collection("notifications").document().getId();
+        long timestamp = System.currentTimeMillis();
+
+        com.iamlaky.emergency119.model.Notification historyNotif = new com.iamlaky.emergency119.model.Notification(
+                notificationId,
+                userId,
+                title,
+                description,
+                "SOS_ALERT",
+                timestamp
+        );
+
+        db.collection("notifications")
+                .document(notificationId)
+                .set(historyNotif)
+                .addOnFailureListener(e -> Log.e("NOTIFICATION_ERROR", "Failed to save history: " + e.getMessage()));
+    }
+
+    private void showLocalNotification(String title, String message) {
+        String channelId = "emergency_alerts";
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(ContextCompat.getColor(this, R.color.mainRed))
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
+
+        notificationManager.notify(1, builder.build());
     }
 
     private void showSOSSuccessDialog(String reportId) {
