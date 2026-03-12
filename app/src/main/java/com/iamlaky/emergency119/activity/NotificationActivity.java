@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.iamlaky.emergency119.adapter.NotificationAdapter;
 import com.iamlaky.emergency119.databinding.ActivityNotificationBinding;
-import com.iamlaky.emergency119.model.NotificationModel;
+import com.iamlaky.emergency119.model.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     private ActivityNotificationBinding binding;
     private NotificationAdapter adapter;
-    private List<NotificationModel> notificationList;
+    private List<Notification> notificationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +56,13 @@ public class NotificationActivity extends AppCompatActivity {
         binding.rvNotifications.setLayoutManager(new LinearLayoutManager(this));
 
         notificationList = new ArrayList<>();
-        notificationList.add(new NotificationModel("Use moni for payment at selected merchants and get 15% discount", "11.00 AM"));
-        notificationList.add(new NotificationModel("Only for you, transfer to another bank free of charge", "11.00 AM"));
-        notificationList.add(new NotificationModel("Emergency alert: Heavy rain expected in your area.", "09.30 AM"));
-        notificationList.add(new NotificationModel("Update: Your profile information has been successfully updated.", "Yesterday"));
+
+        long currentTime = System.currentTimeMillis();
+
+        notificationList.add(new Notification("N1", "U001", "Use moni for payment at selected merchants and get 15% discount", "PROMO", currentTime));
+        notificationList.add(new Notification("N2", "U001", "Only for you, transfer to another bank free of charge", "PROMO", currentTime - 3600000));
+        notificationList.add(new Notification("N3", "U001", "Emergency alert: Heavy rain expected in your area.", "ALERT", currentTime - 7200000));
+        notificationList.add(new Notification("N4", "U001", "Update: Your profile information has been successfully updated.", "SYSTEM", currentTime - 86400000));
 
         adapter = new NotificationAdapter(notificationList);
         binding.rvNotifications.setAdapter(adapter);

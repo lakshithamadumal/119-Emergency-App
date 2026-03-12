@@ -7,14 +7,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.iamlaky.emergency119.R;
-import com.iamlaky.emergency119.model.NotificationModel;
+import com.iamlaky.emergency119.model.Notification;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
-    private final List<NotificationModel> notificationList;
+    private final List<Notification> notificationList;
 
-    public NotificationAdapter(List<NotificationModel> notificationList) {
+    public NotificationAdapter(List<Notification> notificationList) {
         this.notificationList = notificationList;
     }
 
@@ -27,9 +30,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        NotificationModel notification = notificationList.get(position);
+        Notification notification = notificationList.get(position);
         holder.tvTitle.setText(notification.getTitle());
-        holder.tvTime.setText(notification.getTime());
+
+        holder.tvTime.setText(formatTimestamp(notification.getTimestamp()));
+    }
+
+    private String formatTimestamp(long timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        return sdf.format(new Date(timestamp));
     }
 
     @Override
