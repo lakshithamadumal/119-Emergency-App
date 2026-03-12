@@ -200,6 +200,12 @@ public class SendReportActivity extends BaseActivity {
                 .addOnSuccessListener(aVoid -> {
                     incrementUserReportCount();
 
+                    String uid = FirebaseAuth.getInstance().getUid();
+                    String msg = "Your emergency report has been successfully sent to 119.";
+
+                    addNotificationToHistory(uid, "Report Received", msg);
+                    showLocalNotification("Report Received", msg, customId);
+
                     Intent intent = new Intent(this, ReportSuccessActivity.class);
                     intent.putExtra("REPORT_ID", customId);
 
@@ -296,5 +302,49 @@ public class SendReportActivity extends BaseActivity {
         PointAnnotationOptions opts = new PointAnnotationOptions().withPoint(point)
                 .withIconImage(android.graphics.BitmapFactory.decodeResource(getResources(), R.drawable.ic_location_preview_pin));
         manager.create(opts);
+    }
+
+    private void addNotificationToHistory(String userId, String title, String description) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String notificationId = db.collection("notifications").document().getId();
+
+        com.iamlaky.emergency119.model.Notification historyNotif = new com.iamlaky.emergency119.model.Notification(
+                notificationId,
+                userId,
+                title,
+                description,
+                "REPORT",
+                System.currentTimeMillis()
+        );
+
+        db.collection("notifications").document(notificationId).set(historyNotif);
+    }
+
+    private void showLocalNotification(String title, String message, String reportId) {
+        String channelId = "emergency_alerts";
+        android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+
+        android.content.Intent intent = new android.content.Intent(this, ViewReportActivity.class);
+
+        intent.putExtra("REPORT_ID", reportId);
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
+                this,
+                (int) System.currentTimeMillis(),
+                intent,
+                android.app.PendingIntent.FLAG_ONE_SHOT | android.app.PendingIntent.FLAG_IMMUTABLE
+        );
+
+        androidx.core.app.NotificationCompat.Builder builder = new androidx.core.app.NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(androidx.core.content.ContextCompat.getColor(this, R.color.mainRed))
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
 }
