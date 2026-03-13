@@ -86,8 +86,6 @@ public class MainActivity extends BaseActivity {
             });
         }
 
-        setupCallAnimation();
-
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment(), 0);
         }
@@ -160,20 +158,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void setupCallAnimation() {
-        ObjectAnimator cScaleX = ObjectAnimator.ofFloat(binding.pulseCallView, "scaleX", 1.0f, 1.4f);
-        ObjectAnimator cScaleY = ObjectAnimator.ofFloat(binding.pulseCallView, "scaleY", 1.0f, 1.4f);
-        ObjectAnimator cAlpha = ObjectAnimator.ofFloat(binding.pulseCallView, "alpha", 1.0f, 0f);
-
-        cScaleX.setRepeatCount(ObjectAnimator.INFINITE);
-        cScaleY.setRepeatCount(ObjectAnimator.INFINITE);
-        cAlpha.setRepeatCount(ObjectAnimator.INFINITE);
-
-        AnimatorSet callPulseSet = new AnimatorSet();
-        callPulseSet.playTogether(cScaleX, cScaleY, cAlpha);
-        callPulseSet.setDuration(2000);
-        callPulseSet.start();
-    }
 
     private void loadFragment(Fragment fragment, int index) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
