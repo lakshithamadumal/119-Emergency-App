@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="26dp"
-            android:paddingBottom="32dp"> <include layout="@layout/view_profile_input" android:id="@+id/inputBloodGroup" />
+            android:paddingBottom="10dp"> <include layout="@layout/view_profile_input" android:id="@+id/inputBloodGroup" />
 
             <LinearLayout
                 android:layout_width="match_parent"
