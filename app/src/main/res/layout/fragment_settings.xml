@@ -218,7 +218,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/logout_btn_bg"
-        android:drawableStart="@drawable/ic_logout_1"
+        android:drawableStart="@drawable/ic_logout"
         android:drawablePadding="10dp"
         android:paddingStart="20dp"
         android:paddingEnd="25dp"
