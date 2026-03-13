@@ -47,7 +47,7 @@
                     android:id="@+id/ivNotifIcon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_notification"
+                    android:src="@drawable/ic_notification_settings"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -218,7 +218,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/logout_btn_bg"
-        android:drawableStart="@drawable/ic_logout"
+        android:drawableStart="@drawable/ic_logout_1"
         android:drawablePadding="10dp"
         android:paddingStart="20dp"
         android:paddingEnd="25dp"
