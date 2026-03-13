@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:descendantFocusability="afterDescendants"
-            android:paddingBottom="30dp">
+            android:paddingBottom="10dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/mapCard"
@@ -225,7 +225,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_payment_done_red"
                 android:text="SUBMIT REPORT"
                 android:textColor="#FFFFFF"
