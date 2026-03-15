@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.UUID;
 
 import okhttp3.Call;
@@ -180,8 +181,8 @@ public class SendReportActivity extends BaseActivity {
     private void saveReportToFirestore() {
         runOnUiThread(() -> binding.btnSubmit.setText("Finalizing Report..."));
 
-        String customId = "REP_" + new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date())
-                + "_" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+        int number = 1000 + new Random().nextInt(9000);
+        String customId = "#RPT-" + number;
 
         Category cat = categoryAdapter.getSelectedCategory();
         int selectedId = binding.rgSeverity.getCheckedRadioButtonId();
@@ -201,8 +202,7 @@ public class SendReportActivity extends BaseActivity {
                     incrementUserReportCount();
 
                     String uid = FirebaseAuth.getInstance().getUid();
-                    String msg = "Your emergency report was sent successfully.\n"
-                            + "Report ID: " + customId;
+                    String msg = "Your report " + customId + " has been received and is being reviewed.";
 
                     addNotificationToHistory(uid, "Report Received", msg);
                     showLocalNotification("Report Received", msg, customId);

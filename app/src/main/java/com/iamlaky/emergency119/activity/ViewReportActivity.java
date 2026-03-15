@@ -204,11 +204,10 @@ public class ViewReportActivity extends BaseActivity {
                     decrementUserReportCount();
 
                     String uid = FirebaseAuth.getInstance().getUid();
-                    String msg = "Your emergency report was deleted successfully.\n"
-                            + "Report ID: " + reportId;
+                    String msg = "Your report " + reportId + " has been deleted successfully.";
 
                     addNotificationToHistory(uid, "Report Deleted", msg);
-                    showLocalNotification("Report Deleted", "Your emergency report was deleted successfully.",null);
+                    showLocalNotification("Report Deleted", "Your report has been deleted successfully.",null);
 
                     Intent intent = new Intent(ViewReportActivity.this, MainActivity.class);
                     intent.putExtra("TARGET_FRAGMENT", "REPORTS");
