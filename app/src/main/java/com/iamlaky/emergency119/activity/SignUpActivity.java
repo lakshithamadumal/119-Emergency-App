@@ -25,6 +25,8 @@ import com.iamlaky.emergency119.databinding.ActivityLoginBinding;
 import com.iamlaky.emergency119.databinding.ActivitySignUpBinding;
 import com.iamlaky.emergency119.model.User;
 
+import java.util.Random;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
@@ -76,8 +78,12 @@ public class SignUpActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     String uid = task.getResult().getUser().getUid();
 
+                    int number = 1000 + new Random().nextInt(9000);
+                    String userId = "#USR-" + number;
+
                     User user = User.builder()
                             .uid(uid)
+                            .uid(userId)
                             .name(fullName)
                             .email(email)
                             .paymentStatus("Pending")
