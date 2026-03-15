@@ -324,8 +324,17 @@ public class SendReportActivity extends BaseActivity {
         String channelId = "emergency_alerts";
         android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
 
-        android.content.Intent intent = new android.content.Intent(this, ViewReportActivity.class);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            android.app.NotificationChannel channel = new android.app.NotificationChannel(
+                    channelId,
+                    "Emergency Alerts",
+                    android.app.NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Emergency Notifications");
+            notificationManager.createNotificationChannel(channel);
+        }
 
+        android.content.Intent intent = new android.content.Intent(this, ViewReportActivity.class);
         intent.putExtra("REPORT_ID", reportId);
         intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -335,7 +344,6 @@ public class SendReportActivity extends BaseActivity {
                 intent,
                 android.app.PendingIntent.FLAG_ONE_SHOT | android.app.PendingIntent.FLAG_IMMUTABLE
         );
-
         androidx.core.app.NotificationCompat.Builder builder = new androidx.core.app.NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(androidx.core.content.ContextCompat.getColor(this, R.color.mainRed))

@@ -249,7 +249,9 @@ public class MainActivity extends BaseActivity {
                 .addOnSuccessListener(aVoid -> {
 
                     addNotificationToHistory(currentUserId, "SOS Alert", "Your emergency report has been sent.");
-                    showLocalNotification("SOS Alert", "Your emergency report was sent successfully.");
+
+                    String msg = "Your emergency SOS alert was sent successfully.";
+                    showLocalNotification("SOS Alert", msg, reportId);
 
                     showSOSSuccessDialog(reportId);
                     isSOSProcessing = false;
@@ -280,16 +282,28 @@ public class MainActivity extends BaseActivity {
                 .addOnFailureListener(e -> Log.e("NOTIFICATION_ERROR", "Failed to save history: " + e.getMessage()));
     }
 
-    private void showLocalNotification(String title, String message) {
+    private void showLocalNotification(String title, String message, String reportId) {
         String channelId = "emergency_alerts";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            android.app.NotificationChannel channel = new android.app.NotificationChannel(
+                    channelId,
+                    "Emergency Alerts",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Notifications for SOS and Reports");
+            channel.enableLights(true);
+            channel.setLightColor(android.graphics.Color.RED);
+            notificationManager.createNotificationChannel(channel);
+        }
 
         Intent intent = new Intent(this, NotificationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                0,
+                (int) System.currentTimeMillis(),
                 intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -303,7 +317,7 @@ public class MainActivity extends BaseActivity {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
 
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
 
     private void showSOSSuccessDialog(String reportId) {
