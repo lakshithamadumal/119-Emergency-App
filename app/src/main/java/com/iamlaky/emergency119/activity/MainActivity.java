@@ -297,10 +297,10 @@ public class MainActivity extends BaseActivity {
         db.collection("emergency_reports").document(reportId).set(report)
                 .addOnSuccessListener(aVoid -> {
 
-                    addNotificationToHistory(currentUserId, "SOS Alert", "Your emergency report has been sent.");
+                    addNotificationToHistory(currentUserId, "SOS Alert Sent", "SOS alert sent to 119. Help is on the way.");
 
-                    String msg = "Your emergency SOS alert was sent successfully.";
-                    showLocalNotification("SOS Alert", msg, reportId);
+                    String msg = "SOS alert sent to 119. Help is on the way.";
+                    showLocalNotification("SOS Alert Sent", msg, reportId);
 
                     showSOSSuccessDialog(reportId);
                     isSOSProcessing = false;
