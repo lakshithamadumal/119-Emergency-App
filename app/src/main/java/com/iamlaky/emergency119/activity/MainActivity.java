@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void loadFragment(Fragment fragment, int index) {
+    public void loadFragment(Fragment fragment, int index) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
         updateNavUI(index);
@@ -215,7 +215,9 @@ public class MainActivity extends BaseActivity {
                     isSOSProcessing = true;
                     lastShakeTime = currentTime;
 
-                    sendEmergencyReport();
+                    checkProfileAndProceed(() -> {
+                        sendEmergencyReport();
+                    });
                 }
             }
         }
@@ -224,6 +226,53 @@ public class MainActivity extends BaseActivity {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
+
+    private void checkProfileAndProceed(Runnable onSuccessAction) {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+
+        FirebaseFirestore.getInstance().collection("users").document(uid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("name");
+                        String phone = documentSnapshot.getString("phoneNumber");
+                        String address = documentSnapshot.getString("address");
+                        String nic = documentSnapshot.getString("nicNumber");
+
+                        if (name == null || name.isEmpty() ||
+                                phone == null || phone.isEmpty() ||
+                                address == null || address.isEmpty() ||
+                                nic == null || nic.isEmpty()) {
+
+                            isSOSProcessing = false;
+                            showIncompleteProfileDialog();
+                        } else {
+                            onSuccessAction.run();
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    isSOSProcessing = false;
+                    Toast.makeText(this, "Error checking profile", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void showIncompleteProfileDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.layout_profile_incomplete_dialog);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        dialog.findViewById(R.id.btn_complete_profile).setOnClickListener(v -> {
+            dialog.dismiss();
+            loadFragment(new ProfileFragment(), 2);
+        });
+
+        dialog.findViewById(R.id.btn_not_now).setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
 
     @Override
     protected void onResume() {
