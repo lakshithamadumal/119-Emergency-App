@@ -201,7 +201,7 @@ public class SendReportActivity extends BaseActivity {
                     incrementUserReportCount();
 
                     String uid = FirebaseAuth.getInstance().getUid();
-                    String msg = "Your emergency report has been successfully sent to 119. "
+                    String msg = "Your emergency report was sent successfully.\n"
                             + "Report ID: " + customId;
 
                     addNotificationToHistory(uid, "Report Received", msg);
