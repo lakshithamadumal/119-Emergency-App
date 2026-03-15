@@ -6,22 +6,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.iamlaky.emergency119.adapter.NotificationAdapter;
 import com.iamlaky.emergency119.databinding.ActivityNotificationBinding;
-import com.iamlaky.emergency119.model.Notification;
 import com.iamlaky.emergency119.viewmodel.NotificationViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NotificationActivity extends AppCompatActivity {
 
@@ -32,6 +27,13 @@ public class NotificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (shouldRequestPermission()) {
+            startActivity(new Intent(this, NotificationPermissionActivity.class));
+            finish();
+            return;
+        }
+
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -41,6 +43,20 @@ public class NotificationActivity extends AppCompatActivity {
         observeViewModel();
 
         binding.btnBack.setOnClickListener(view -> finish());
+    }
+
+    private boolean shouldRequestPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return false;
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+
+        SharedPreferences pref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        return !pref.getBoolean("notif_skipped", false);
     }
 
     private void setupRecyclerView() {
@@ -56,7 +72,6 @@ public class NotificationActivity extends AppCompatActivity {
                 binding.rvNotifications.setAdapter(adapter);
             }
         });
-
         viewModel.fetchNotifications();
     }
 

@@ -5,15 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.iamlaky.emergency119.R;
 
@@ -21,7 +16,7 @@ public class NotificationPermissionActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                goToNotifications();
+                completeProcess();
             });
 
     @Override
@@ -29,22 +24,20 @@ public class NotificationPermissionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_permission);
 
-        // Allow Button
         findViewById(R.id.btn_allow_notifications).setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
             } else {
-                goToNotifications();
+                completeProcess();
             }
         });
 
-        // Skip Button
         findViewById(R.id.btn_skip).setOnClickListener(v -> {
-            goToNotifications();
+            completeProcess();
         });
     }
 
-    private void goToNotifications() {
+    private void completeProcess() {
         SharedPreferences pref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         pref.edit().putBoolean("notif_skipped", true).apply();
 
