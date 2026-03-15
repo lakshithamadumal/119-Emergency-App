@@ -203,6 +203,13 @@ public class ViewReportActivity extends BaseActivity {
                     Toast.makeText(this, "Report Deleted Successfully", Toast.LENGTH_SHORT).show();
                     decrementUserReportCount();
 
+                    String uid = FirebaseAuth.getInstance().getUid();
+                    String msg = "Your emergency report was deleted successfully.\n"
+                            + "Report ID: " + reportId;
+
+                    addNotificationToHistory(uid, "Report Deleted", msg);
+                    showLocalNotification("Report Deleted", "Your emergency report was deleted successfully.",null);
+
                     Intent intent = new Intent(ViewReportActivity.this, MainActivity.class);
                     intent.putExtra("TARGET_FRAGMENT", "REPORTS");
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -308,4 +315,58 @@ public class ViewReportActivity extends BaseActivity {
             }
         }
     }
+
+    private void addNotificationToHistory(String userId, String title, String description) {
+        com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
+        String notificationId = db.collection("notifications").document().getId();
+
+        com.iamlaky.emergency119.model.Notification historyNotif = new com.iamlaky.emergency119.model.Notification(
+                notificationId,
+                userId,
+                title,
+                description,
+                "REPORT_DELETED",
+                System.currentTimeMillis()
+        );
+
+        db.collection("notifications").document(notificationId).set(historyNotif);
+    }
+
+    private void showLocalNotification(String title, String message, String reportId) {
+        String channelId = "emergency_alerts";
+        android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            android.app.NotificationChannel channel = new android.app.NotificationChannel(
+                    channelId,
+                    "Emergency Alerts",
+                    android.app.NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Emergency Notifications");
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        android.content.Intent intent = new android.content.Intent(this, NotificationActivity.class);
+
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
+                this,
+                (int) System.currentTimeMillis(),
+                intent,
+                android.app.PendingIntent.FLAG_ONE_SHOT | android.app.PendingIntent.FLAG_IMMUTABLE
+        );
+
+        androidx.core.app.NotificationCompat.Builder builder = new androidx.core.app.NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(androidx.core.content.ContextCompat.getColor(this, R.color.mainRed))
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+    }
+
 }
