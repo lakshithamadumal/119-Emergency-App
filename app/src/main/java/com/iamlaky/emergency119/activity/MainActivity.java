@@ -39,6 +39,8 @@ import com.iamlaky.emergency119.fragment.SettingsFragment;
 import com.iamlaky.emergency119.model.EmergencyReport;
 import com.iamlaky.emergency119.viewmodel.UserViewModel;
 
+import java.util.Random;
+
 public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
@@ -289,7 +291,8 @@ public class MainActivity extends BaseActivity {
     private void sendEmergencyReport() {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String reportId = db.collection("emergency_reports").document().getId();
+        int number = 1000 + new Random().nextInt(9000);
+        String reportId = "#SOS-" + number;
         long timestamp = System.currentTimeMillis();
 
         EmergencyReport report = new EmergencyReport(reportId, currentUserId, timestamp);
