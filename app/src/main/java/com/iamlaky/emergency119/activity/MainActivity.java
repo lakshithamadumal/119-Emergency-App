@@ -319,23 +319,30 @@ public class MainActivity extends BaseActivity {
     }
 
     private void addNotificationToHistory(String userId, String title, String description) {
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String notificationId = db.collection("notifications").document().getId();
+
+        int number = 1000 + new Random().nextInt(9000);
+        String notificationId = "#NTF-" + number;
+
         long timestamp = System.currentTimeMillis();
 
-        com.iamlaky.emergency119.model.Notification historyNotif = new com.iamlaky.emergency119.model.Notification(
-                notificationId,
-                userId,
-                title,
-                description,
-                "SOS_ALERT",
-                timestamp
-        );
+        com.iamlaky.emergency119.model.Notification historyNotif =
+                new com.iamlaky.emergency119.model.Notification(
+                        notificationId,
+                        userId,
+                        title,
+                        description,
+                        "SOS_ALERT",
+                        timestamp
+                );
 
         db.collection("notifications")
                 .document(notificationId)
                 .set(historyNotif)
-                .addOnFailureListener(e -> Log.e("NOTIFICATION_ERROR", "Failed to save history: " + e.getMessage()));
+                .addOnFailureListener(e ->
+                        Log.e("NOTIFICATION_ERROR", "Failed to save history: " + e.getMessage())
+                );
     }
 
     private void showLocalNotification(String title, String message, String reportId) {

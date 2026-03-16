@@ -319,19 +319,26 @@ public class ViewReportActivity extends BaseActivity {
     }
 
     private void addNotificationToHistory(String userId, String title, String description) {
-        com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
-        String notificationId = db.collection("notifications").document().getId();
 
-        com.iamlaky.emergency119.model.Notification historyNotif = new com.iamlaky.emergency119.model.Notification(
-                notificationId,
-                userId,
-                title,
-                description,
-                "REPORT_DELETED",
-                System.currentTimeMillis()
-        );
+        com.google.firebase.firestore.FirebaseFirestore db =
+                com.google.firebase.firestore.FirebaseFirestore.getInstance();
 
-        db.collection("notifications").document(notificationId).set(historyNotif);
+        int number = 1000 + new java.util.Random().nextInt(9000);
+        String notificationId = "#NTF-" + number;
+
+        com.iamlaky.emergency119.model.Notification historyNotif =
+                new com.iamlaky.emergency119.model.Notification(
+                        notificationId,
+                        userId,
+                        title,
+                        description,
+                        "REPORT_DELETED",
+                        System.currentTimeMillis()
+                );
+
+        db.collection("notifications")
+                .document(notificationId)
+                .set(historyNotif);
     }
 
     private void showLocalNotification(String title, String message, String reportId) {

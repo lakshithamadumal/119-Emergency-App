@@ -308,19 +308,25 @@ public class SendReportActivity extends BaseActivity {
     }
 
     private void addNotificationToHistory(String userId, String title, String description) {
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String notificationId = db.collection("notifications").document().getId();
 
-        com.iamlaky.emergency119.model.Notification historyNotif = new com.iamlaky.emergency119.model.Notification(
-                notificationId,
-                userId,
-                title,
-                description,
-                "REPORT",
-                System.currentTimeMillis()
-        );
+        int number = 1000 + new Random().nextInt(9000);
+        String notificationId = "#NTF-" + number;
 
-        db.collection("notifications").document(notificationId).set(historyNotif);
+        com.iamlaky.emergency119.model.Notification historyNotif =
+                new com.iamlaky.emergency119.model.Notification(
+                        notificationId,
+                        userId,
+                        title,
+                        description,
+                        "REPORT",
+                        System.currentTimeMillis()
+                );
+
+        db.collection("notifications")
+                .document(notificationId)
+                .set(historyNotif);
     }
 
     private void showLocalNotification(String title, String message, String reportId) {
