@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,6 +44,8 @@ public class NotificationActivity extends AppCompatActivity {
         observeViewModel();
 
         binding.btnBack.setOnClickListener(view -> finish());
+
+        EdgeToEdge.enable(this);
     }
 
     private boolean shouldRequestPermission() {

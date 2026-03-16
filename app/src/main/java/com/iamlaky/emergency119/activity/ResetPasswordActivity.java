@@ -3,6 +3,8 @@ package com.iamlaky.emergency119.activity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.AuthCredential;
@@ -31,6 +33,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
 
         binding.btnUpdatePassword.setOnClickListener(v -> handlePasswordUpdate());
+        EdgeToEdge.enable(this);
     }
 
     private void setupUI() {

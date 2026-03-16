@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +48,8 @@ public class SplashActivity extends AppCompatActivity {
             }
 
         }, 2500);
+
+        EdgeToEdge.enable(this);
     }
 
     private void checkUserSubscription(String uid) {

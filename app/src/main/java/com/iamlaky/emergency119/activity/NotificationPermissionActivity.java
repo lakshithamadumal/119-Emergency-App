@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,8 @@ public class NotificationPermissionActivity extends AppCompatActivity {
         findViewById(R.id.btn_skip).setOnClickListener(v -> {
             completeProcess();
         });
+
+        EdgeToEdge.enable(this);
     }
 
     private void completeProcess() {

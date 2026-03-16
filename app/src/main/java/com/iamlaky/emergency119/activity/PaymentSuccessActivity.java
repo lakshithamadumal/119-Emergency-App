@@ -2,6 +2,8 @@ package com.iamlaky.emergency119.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +51,8 @@ public class PaymentSuccessActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        EdgeToEdge.enable(this);
     }
 
     private void setupDetailRow(com.iamlaky.emergency119.databinding.RowReceiptDetailBinding rowBinding, String label, String value) {

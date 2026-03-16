@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -109,6 +110,9 @@ public class MainActivity extends BaseActivity {
         lastAcceleration = SensorManager.GRAVITY_EARTH;
         acceleration = 0.00f;
         /// Shake Initialize
+
+        ///
+        EdgeToEdge.enable(this);
     }
 
     private void makePhoneCall(String number) {

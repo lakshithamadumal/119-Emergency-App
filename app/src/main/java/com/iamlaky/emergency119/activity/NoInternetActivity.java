@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.iamlaky.emergency119.R;
@@ -28,6 +29,8 @@ public class NoInternetActivity extends AppCompatActivity {
                 Toast.makeText(this, "Still no internet!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        EdgeToEdge.enable(this);
     }
 
     @Override

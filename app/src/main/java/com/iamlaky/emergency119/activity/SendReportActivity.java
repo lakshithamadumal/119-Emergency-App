@@ -113,6 +113,8 @@ public class SendReportActivity extends BaseActivity {
         binding.btnBack.setOnClickListener(v -> finish());
         binding.btnUploadGallery.setOnClickListener(v -> pickImages());
         binding.btnSubmit.setOnClickListener(v -> validateAndStartUpload());
+
+        EdgeToEdge.enable(this);
     }
 
     private void validateAndStartUpload() {

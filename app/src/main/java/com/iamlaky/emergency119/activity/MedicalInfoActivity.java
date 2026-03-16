@@ -43,6 +43,8 @@ public class MedicalInfoActivity extends AppCompatActivity {
         loadMedicalData();
 
         binding.btnUpdateMedical.setOnClickListener(v -> updateMedicalInfo());
+
+        EdgeToEdge.enable(this);
     }
 
     private void setupUI() {

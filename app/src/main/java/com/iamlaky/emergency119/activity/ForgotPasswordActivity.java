@@ -3,6 +3,7 @@ package com.iamlaky.emergency119.activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +40,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
             sendPasswordReset(email);
         });
+
+        EdgeToEdge.enable(this);
     }
 
     private void sendPasswordReset(String email) {

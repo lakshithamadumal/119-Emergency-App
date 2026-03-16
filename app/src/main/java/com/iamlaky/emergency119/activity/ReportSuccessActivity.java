@@ -57,6 +57,8 @@ public class ReportSuccessActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
+
+            EdgeToEdge.enable(this);
         });
     }
 

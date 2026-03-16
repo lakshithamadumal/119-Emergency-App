@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -72,6 +73,8 @@ public class ViewReportActivity extends BaseActivity {
                 Toast.makeText(this, "Operator number not found!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        EdgeToEdge.enable(this);
     }
 
     private void observeReport() {
