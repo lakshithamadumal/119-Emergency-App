@@ -3,6 +3,7 @@ package com.iamlaky.emergency119.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -31,6 +32,14 @@ public class ReportSuccessActivity extends AppCompatActivity {
             return insets;
         });
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                goToMainActivity();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
         binding.btnTrackReport.setOnClickListener(v -> {
             if (reportId != null) {
                 Intent intent = new Intent(ReportSuccessActivity.this, ViewReportActivity.class);
@@ -40,10 +49,16 @@ public class ReportSuccessActivity extends AppCompatActivity {
                 finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             } else {
-                finish();
+                goToMainActivity();
             }
         });
+    }
 
-
+    private void goToMainActivity() {
+        Intent intent = new Intent(ReportSuccessActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }
