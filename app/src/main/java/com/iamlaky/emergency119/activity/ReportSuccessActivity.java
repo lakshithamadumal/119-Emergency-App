@@ -42,14 +42,20 @@ public class ReportSuccessActivity extends AppCompatActivity {
 
         binding.btnTrackReport.setOnClickListener(v -> {
             if (reportId != null) {
-                Intent intent = new Intent(ReportSuccessActivity.this, ViewReportActivity.class);
-                intent.putExtra("REPORT_ID", reportId);
-                startActivity(intent);
+                Intent mainIntent = new Intent(ReportSuccessActivity.this, MainActivity.class);
+                mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                Intent viewIntent = new Intent(ReportSuccessActivity.this, ViewReportActivity.class);
+                viewIntent.putExtra("REPORT_ID", reportId);
+
+                startActivities(new Intent[]{mainIntent, viewIntent});
 
                 finish();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             } else {
-                goToMainActivity();
+                Intent intent = new Intent(ReportSuccessActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -59,6 +65,5 @@ public class ReportSuccessActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }
