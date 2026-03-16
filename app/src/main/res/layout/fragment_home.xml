@@ -83,7 +83,7 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_marginStart="170dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="28dp"
             android:background="@drawable/circle_background_blue"
             android:padding="12dp"
             android:src="@drawable/ic_ambulance"
