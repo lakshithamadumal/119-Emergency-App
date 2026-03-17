@@ -101,6 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
                             .allergies("")
                             .medicalConditions("")
                             .currentMedications("")
+                            .fcmToken("")
                             .build();
 
                     firebaseFirestore.collection("users").document(uid).set(user).addOnSuccessListener(unused -> {

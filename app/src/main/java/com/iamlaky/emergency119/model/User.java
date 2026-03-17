@@ -34,4 +34,7 @@ public class User {
     private String allergies;
     private String medicalConditions;
     private String currentMedications;
+
+    // Notification
+    private String fcmToken;
 }

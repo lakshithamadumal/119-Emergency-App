@@ -113,6 +113,25 @@ public class MainActivity extends BaseActivity {
 
         ///
         EdgeToEdge.enable(this);
+
+        updateFCMTokenToFirestore();
+    }
+
+    private void updateFCMTokenToFirestore() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                String token = task.getResult();
+                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                FirebaseFirestore.getInstance().collection("users")
+                        .document(currentUserId)
+                        .update("fcmToken", token)
+                        .addOnSuccessListener(aVoid -> Log.d("FCM", "Token updated successfully"))
+                        .addOnFailureListener(e -> Log.e("FCM", "Failed to update token", e));
+            } else {
+                Log.w("FCM", "Fetching FCM registration token failed", task.getException());
+            }
+        });
     }
 
     private void makePhoneCall(String number) {
